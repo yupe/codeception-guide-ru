@@ -2,13 +2,13 @@
 
 **Phar**
 
-Grab Codeception phar executable http://codeception.com/thanks
+Скачайте phar-архив Codeception с http://codeception.com/thanks
 
 ~~~
 wget http://codeception.com/codecept.phar .
 ~~~
 
-Prepare tests directory and configs
+Подготовьте необходимую структуру каталогов и конфигурационных файлов
 
 ~~~
 php codecept.phar bootstrap
@@ -16,21 +16,21 @@ php codecept.phar bootstrap
 
 **Composer**
 
-Install a Composer to your project's root http://getcomposer.org/
+Установите Composer в корень вашего проекта http://getcomposer.org/
 
-Run
+Выполните команду
 
 ~~~
 php composer.phar require "codeception/codeception:*"
 ~~~
 
-From now on Codeception (with installed PHPUnit) can be run as:
+С этого момента Codeception (с установленным PHPUnit) может быть запущен как:
 
 ~~~
 vendor/bin/codecept
 ~~~
 
-Initialize your testing environment with
+Инициализируйте тестовое окружение следующей командой 
 
 ~~~
 vendor/bin/codecept bootstrap
@@ -38,15 +38,15 @@ vendor/bin/codecept bootstrap
 
 **Git**
 
-Alternative installation method for bugfixing, contributions and hacking
+Дополнительный способ установки для исправления ошибок, участия в разработке Codeception и хакерства
 
-Clone from GitHub:
+Склонируйте репозиторий с GitHub:
 
 ~~~
 git clone git@github.com:Codeception/Codeception.git
 ~~~
 
-Install dependencies with Composer
+С помощью Composer установите все зависимости
 
 ~~~
 cd Codeception
@@ -54,18 +54,22 @@ curl -s http://getcomposer.org/installer | php
 php composer.phar install
 ~~~
 
-Execute bootstrap, specifying path to your directory.
+Инициализируйте  необходимые каталоги и файлы конфигурации, указав путь к каталогу вашего проекта
 
 ~~~
 php codecept bootstrap /path/to/my/project
 ~~~
 
-To run tests use -c option for specifing path.
+Для запуска тестов используйте ключ -c для указания директории с тестами.
 
 ~~~
 php codecept run -c /path/to/my/project
 ~~~
 
-If you want to build phar package run php bin/build_phar.php
+Если вы хотите собрать phar архив - выполните команду
 
-Don't forget to send Pull Requests!
+~~~
+php bin/build_phar.php
+~~~
+
+Не забудьте прислать pull-request!
