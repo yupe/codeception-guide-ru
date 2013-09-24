@@ -1,4 +1,4 @@
-# Acceptance Testing
+# Приемочные тесты
 Acceptance testing is testing that can be performed by a non-technical person. That person can be your tester, manager or even client.
 If you are developing a web-application (and probably you are) the tester needs nothing more then a web browser to check that your site works correctly. In Codeception we call such testers a WebGuy. You can reproduce a WebGuy's actions in scenarios and run them automatically after each site change. Codeception keeps tests clean and simple, since they were recorded from the words of WebGuy. 
 
