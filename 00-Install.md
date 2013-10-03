@@ -73,3 +73,5 @@ php bin/build_phar.php
 ~~~
 
 Не забудьте прислать pull-request!
+
+Трудились и переводили ребята из [amyLabs](http://amylabs.ru/)

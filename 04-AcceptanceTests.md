@@ -1,10 +1,11 @@
 # Приемочные тесты
-Acceptance testing is testing that can be performed by a non-technical person. That person can be your tester, manager or even client.
-If you are developing a web-application (and probably you are) the tester needs nothing more then a web browser to check that your site works correctly. In Codeception we call such testers a WebGuy. You can reproduce a WebGuy's actions in scenarios and run them automatically after each site change. Codeception keeps tests clean and simple, since they were recorded from the words of WebGuy. 
 
-It makes no difference what CMS or Framework is used on the site. You can event test sites created on different platforms, like Java, .NET, etc. It's always a good idea to add tests to your web site. At least you will be sure that site features work after the last changes were made. 
+Приемочные тесты - это тесты, которые могут быть выполнены не техническим специалистом. Это может быть ваш тестировщик, менеджер или даже клиент/заказчик.
+Если вы разрабатываете веб-приложение (вы ведь именно это делаете ?) тестировщику необходим только браузер, чтобы убедиться, что приложение работает корректно. В Codeception такого тестировщика мы называем "WebGuy". Вы можете воспроизвести действия пользователя в сценариях и запускать их после каждого изменения сайта. Codeception позволяет делать код тестов простым и понятным, все операции записываются как действия нашего WebGuy. 
 
-## Sample Scenario
+Не имеет значения какая CMS или Framework используется на сайте. Можно даже тестировать сайты, написанные на других платформах, таких как Java, .NET, etc. Добавление тестов для вашего сайта - это отличная идея, стоит потратить на это время! По крайней мере вы будете уверены, что сайт работает корректно после последних изменений.
+
+## Простой сценарий
 
 Probably the first test you would want to run would be signing in. In order to write such a test, we still require basic knowledge of PHP and HTML.
 
@@ -343,3 +344,5 @@ And in the end we performed assertion on current content.
 ## Conclusion
 
 Writing acceptance tests with Codeception and PhpBrowser is a good start. You can easily test your Joomla, Drupal, Wordpress sites, as well as those made with frameworks. Writing acceptance tests is like describing a tester's actions in PHP. They are quite readable and very easy to write. Don't forget to repopulate the database on each test run.
+
+Трудились и переводили ребята из [amyLabs](http://amylabs.ru/)
