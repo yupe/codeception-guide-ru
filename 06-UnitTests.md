@@ -1,32 +1,32 @@
-# Юнит тестирование
+# Модульное (Unit) тестирование
 
-Codeception uses PHPUnit as a backend for running tests. Thus, any PHPUnit test can be added to Codeception test suite and then executed.
-If you ever wrote a PHPUnit test, then do it as well as you did before. Codeception will add you some cool helpers to simplify common tasks.
-If you don't have experience in writing unit tests, please read the [PHPUnit manual](http://www.phpunit.de/manual/3.6/en/index.html) to start.
-The basics of unit tests are skipped here, but instead you will get a basic knowledge on what features Codeception adds to unit tests.
+В качестве базы для запуска тестов Codeception использует PHPUnit. Таким образом любой PHPUnit тест может быть добавлен к набору тестов (test suite) Codeception после чего может быть успешно выполнен.
+Если вы уже писали тесты для PHPUnit, в Codeception вы можете использовать их бе з изменений. Codeception добавляет некоторые функции или помощники (helpers) которые позволяют упростить часть задач.
+В случае, если у вас отсутствует опыт написания тестов, рекомендуем для начала ознакомится с [Документацией по PHPUnit](http://www.phpunit.de/manual/3.7/en/index.html).
+В данном разделе отсутствует описание основ модульного тестирования, вместо этого здесь описаны особенности и функции которыми Codeception дополняет модульные тесты.
 
-__To say it again: you don't need to install PHPUnit to run it's tests. Codeception can run them too.__
+__Повторим: Нет необходимости в установке PHPUnit для запуска его тестов. Codeception может выполнять их.__
 
-## Creating Test
+## Создание тестов
 
-Codeception have nice generators to simplify test creation.
-You can start with generating a classical PHPUnit test extending `\PHPUnit_Framework_TestCase` class.
-This can be done by this command:
+Codeception имеет набор простых генераторов для того чтобы упростить создание тестов.
+Для начала вы можете создать классический PHPUnit тест унаследованный от класса `\PHPUnit_Framework_TestCase`.
+Это можно сделать при помощи следующей команды:
 
 ```bash
 $ php codecept.phar generate:phpunit unit Example
 ```
 
-Codeception has it's addons to standard unit tests. So let's try them.
-We need another command to create Codeception-powered unit tests.
+Codeception имеет собственные дополнения к стандартным модульным тестам. Давайте попробуем создать их.
+Для создания модульных тестов дополненных Codeception используется другая команда.
 
 ```bash
 $ php codecept.phar generate:test unit Example
 ```
 
-Both tests will create a new `ExampleTest` file located in `tests/unit` directory.
+Обе команды создадут новый файл `ExampleTest` расположенный в каталоге `tests/unit`.
 
-A test created by `generate:test` command will look like this:
+Тест созданный командой `generate:test` будет выглядеть так:
 
 ```php
 <?php
@@ -51,11 +51,11 @@ class ExampleTest extends \Codeception\TestCase\Test
 }
 ?>
 ```
-This class has predefined `_before` and `_after` methods to start with. You can use them to create a tested object before each test, and destroy it afterwards.
+Этот класс имеет два предопределенных метода в начале `_before` и `_after`. Вы можете использовать их для создания объектов перед началом выполнения тестов и их удаления после того как тест будет выполнен.
 
-As you see unlike in PHPUnit setUp/tearDown methods are replaced with their aliases: `_before`, `_after`.
-The actual setUp and tearDown was implemented by parent class `\Codeception\TestCase\Test` and is used to include a bootstrap file (`_bootstrap.php` by default) and set up the codeGuy class to have all the cool actions from Cept-files to be run as a part of unit tests. Just like in accordance tests, you can choose the proper modules for `CodeGuy` class in `unit.suite.yml` configuration file.
-So If you implement `setUp` and `tearDown` be sure, that you will call their parent method.
+Как вы могли заметить PHPUnit методы setUp/tearDown заменены на методы: `_before`, `_after`.
+Настоящие методы setUp и tearDown реализованы внутри родительского класса: `\Codeception\TestCase\Test` и используются для подключения файла загрузчика (bootstrap) (По умолчанию `_bootstrap.php`) а так же для настройки класса codeGuy что позволяет использовать все возможности Cept-файлов внутри модульных тестов. Точно так же как и в других видах тестов, вы можете настроить модули специфичные для класса `CodeGuy` в конфигурационном файле `unit.suite.yml`.
+Таким образом, если вы реализуете методы `setUp` и `tearDown` не забудьте вызвать их родительские методы внутри своих.
 
 
 ```yaml
@@ -67,9 +67,9 @@ modules:
     enabled: [Unit, CodeHelper]
 ```
 
-### Testing Database
+### Тестирование баз данных
 
-Probably, there is no very useful modules set up by default for CodeGuy class. That's because the CodeGuy class is mostly used for scenario-driven unit tests, described in next chapters. But that's ok, we can get a use of it by adding modules we need. For example, we can add a Db module to test updates in database.
+Вероятно нет особо полезных модулей которые должны быть установлены для класса CodeGuy по умолчанию. Все потому, что класс CodeGuy по большей части используется для scenario-driven модульных тестов, описанных в следующих разделах. Однако в этом нет ни чего страшного, мы легко можем добавить необходимые модули. К примеру мы можем добавить модуль Db для тестирования данных в БД.
 
 ```yaml
 # Codeception Test Suite Configuration
@@ -80,13 +80,13 @@ modules:
     enabled: [Unit, Db, CodeHelper]
 ```
 
-After running the build command
+После выполнения комманды "сборки":
 
 ```bash
 $ php codecept.phar build
 ```
 
-A new methods will be added into CodeGuy class. Thus, you can start using database methods in your test:
+Новые методы будут добавлены в класс CodeGuy. Таким образом теперь вы можете использовать в ваших тестах методы для работы с БД:
 
 ```php
 <?php
@@ -100,16 +100,16 @@ function testSavingUser()
 ?>
 ```
 
-Database will be cleaned and populated after each test, as it happens for acceptance and functional tests.
-If it's not your required behavior, please change the settings of `Db` module for current suite.
+Бада данных будет очищена и заполнена после прохождения каждого теста, точно так же как это происходит в функциональных и приемочных тестах.
+Если такое поведения модуля `Db` вам не подходит для текущего набора тестов, просто смените его настройки.
 
-### Modules
+### Модули
 
-*new in 1.5.2*
+*добавлено в 1.5.2*
 
-Codeception allows you to access properties and methods of all modules defined for this suite. Unlike using the CodeGuy class for this purpose, using module directly grants you access to all public properties of that module.
+Codeception позволяет получить доступ к свойствам и методам любого из модулей определенных для данного набора. Вместо использования класса CodeGuy, использование прямого доступа к модулям позволяет получить доступ к любым публичным свойствам конкретного модуля.
 
-For example, if you use `Symfony2` module here is the way you can access Symfony container:
+К примеру, если вы используете модуль `Symfony2` обратится к Symfony контейнеру можно следующим способом:
 
 ```php
 <?php
@@ -119,23 +119,24 @@ For example, if you use `Symfony2` module here is the way you can access Symfony
 $container = $this->getModule('Symfony2')->container;
 ```
 
-All public variables are listed in references for corresponding modules.
+Все публичные свойства модулей описаны в соответствующих разделах справки.
 
-### Bootstrap
+### Начальная загрузка (Bootstrap)
 
-The bootstrap file is located in suite directory and is named `_bootstrap` and is **included before each test** (with `setUp` method in parent class). It's widely used in acceptance and functional tests to initialize the predefined variables. In unit tests it can be used for sharing the same data among the different tests. But the main purpose of is to set up an autoloader for your project inside this class. Otherwise Codeception will not find the testing classes and fail.
+Файл загрузки (bootstrap) расположен в директории набора тестов и имеет название `_bootstrap`. Данный файл **подвлючается перед выполнением каждого теста** (с помощью метода `setUp` родительского класса). Он широко используется в приемочных (acceptance) и функциональных (functional) тестах для инициализации различных предустановленных переменных. В модульных тестах он может быть полезен при использовании одинаковых данных с разными тестами. Однако его главное предназначение - установка автозагрузчика для вашего проекта внутри данного класса. Иначе Codeception не сможет найти тестируемые классы и тесты не выполнятся.
 
-### Stubs
+### Заглушки (Stubs)
 
-The first line of generated class includes a Stub utility class into a test file. This means you can easily create dummy classes instead of real one. Don't waste your time on adding many parameters to constructor, just run the `Stub::make` to create a new class.
+В первой строке класса подключается класс Strub для использования заглушек в тестах. Заглушки (strubs) позволяют вам легко подменять реальные классы их муляжами.
+Не тратьте ваше время на указание большого количетва параметров в конструкторе просто вызовите `Stub::make` для содания класса заглушки.
 
-Stubs are created with PHPUnit's mocking framework. Please refer to [PHPUnit Manual](http://www.phpunit.de/manual/3.6/en/test-doubles.html) if you need additional features on stubs or mocks.
+Заглушки (Stubs) созданы на базе PHPUnit's mocking framework. Изучите [PHPUnit Manual](http://www.phpunit.de/manual/3.6/en/test-doubles.html) если вы нуждаетесь в дополнительной информации на тему заглушек (stubs or mocks).
 
-Full reference on stub util class can be [found here](/docs/reference/stubs).
+Полное описание класса для работы с заглушками (stub util class) находится [здесь](/docs/reference/stubs).
 
-### Mix it all together!
+### Соединим полученные знания вместе!
 
-Less words, more code for better understanding.
+Меньше слов, больше кода для лучшего усвоения материала.
 
 ```php
 <?php
@@ -164,6 +165,6 @@ class ExampleTest extends \Codeception\TestCase\Test
 ?>
 ```
 
-## Conclusion
+## Заключение
 
-PHPUnit tests is a first-class citizen in test suites. Whenever you need to write and execute unit tests, you don't need to install PHPUnit manually, but use a Codeception to execute them. Some nice features are added to common unit tests by integrating Codeception modules. For most of unit and integration testing PHPUnit tests are just enough. They are fast and easy to maintain.
+Тесты PHPUnit первоклассная вещь в тестовых наборах. Всякий раз когда вам понадобится использовать модульные тесты, нет необходимости в установке PHPUnit, Codeception выполнит такие тесты без проблем. Codeception включает некоторые полезные дополнения в стандартным модульным тестам путем интеграции своих модулей. Для большинства модульных и интеграционных тестов, функционала PHPUnit вполне достаточно. Данные тесты быстры и достаточно просты в использовании.
