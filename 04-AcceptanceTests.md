@@ -1,4 +1,4 @@
-# Приемочные тесты
+# Приемочные (acceptance) тесты
 
 Приемочные тесты - это тесты, которые могут быть выполнены не техническим специалистом. Это может быть ваш тестировщик, менеджер или даже клиент/заказчик.
 Если вы разрабатываете веб-приложение (вы ведь именно это делаете ?) тестировщику необходим только браузер, чтобы убедиться, что приложение работает корректно. В Codeception такого тестировщика мы называем "WebGuy". Вы можете воспроизвести действия пользователя в сценариях и запускать их после каждого изменения сайта. Codeception позволяет делать код тестов простым и понятным, все операции записываются как действия нашего WebGuy. 
@@ -7,7 +7,7 @@
 
 ## Простой сценарий
 
-Probably the first test you would want to run would be signing in. In order to write such a test, we still require basic knowledge of PHP and HTML.
+Наверняка первым сценарием, который вы захотите запустить будет авторизация пользователя. Чтобы написать такой сценарий вам необходимы базовые знания HTML и PHP.
 
 ```php
 <?php
@@ -21,7 +21,7 @@ $I->see('Welcome, Davert!');
 ?>
 ```
 
-This scenario can probably be read by non-technical people. Codeception can even 'naturalize' this scenario, converting it into plain English:
+Такой сценарий может быть прочитан и понят даже не техническим специалистом. Codeception может даже преобразовать этот сценарий в текст на английском языке:
 
 ```
 I WANT TO SIGN IN
@@ -32,13 +32,13 @@ I click 'LOGIN'
 I see 'Welcome, Davert!'
 ```
 
-Such transformations can be done by command: 
+Такое преобразование может быть выполнено командой: 
 
 ``` bash
 $ php codecept.phar generate:scenarios
 ```
 
-Generated scenarios will be stored in your data dir within text files.
+Сгенерированные сценарии сохраняются в каталоге "data" основного каталога с тестами
 
 This scenario can be performed either by a simple PHP browser or by a browser through Selenium (also Sahi or ZombieJS). We will start writing our first acceptance tests with a PHP Browser. This is a good place to start If you don't have experience working with Selenium Server or Sahi. 
 
