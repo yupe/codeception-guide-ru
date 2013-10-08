@@ -21,8 +21,7 @@ php codecept.phar console suitename
 
 ## Запуск из разных каталогов.
 
-If you have several project with Codeception tests in it you can use one `codecept.phar` file to run their tests.
-You can pass a `-c` option to any Codeception command, excluding `bootstrap` to execute codeception in other directory.
+Если у вас есть несколько проектов содержащих Coeception тесты, вы можете использовать один `codecept.phar` файл для их запуска. Чтобы запустить Codeception из другой директории, вы можете добавить опцию `-c` к любой Codeception команде кроме `bootstrap`.
 
 ```
 
@@ -32,7 +31,7 @@ php codecept.phar generate:cept acceptance CreateArticle -c ~/projects/drupal/
 
 ```
 
-To create a project in directory other then current just provide it's path as a parameter.
+Для создания проекта в директории отличной от той, где вы находитесь, просто добавьте ее путь как параметр.
 
 
 ```
@@ -42,11 +41,11 @@ php codecept.phar bootstrap ~/projects/drupal/
 
 ```
 
-Basically `-c` option allows you specify not only the path but a config file to be used. Thus, you can have several `codeception.yml` file for your test suite. You may use it to specify different environments and settings. Just pass a filename into `-c` parameter to execute tests with specific config settings.
+В сущности опция `-c` позволяет указать не только путь, но и файл конфигурации. Таким образом у вас может быть несколько различных файлов `codeception.yml` в одном тестовом наборе. Вы можете использовать их для указания разных переменных окружения и настроек. Просто передайте имя конфигурационного файла в параметре `-c` для того, чтобы выполнить тесты с настройками указанными в данном конфигурационном файле.
 
-## Groups
+## Группы
 
-There are several ways to execute bunch of tests. You can run tests from specific directory:
+Есть несколько путей позволяющих выполнить группу тестов. Вы можете выполнить тесты в определенной директории:
 
 ```
 
@@ -55,7 +54,7 @@ php codecept.phar run tests/acceptance/admin
 
 ```
 
-Or execute one (or several) specific groups of tests:
+Или выполнить одну (или несколько) групп тестов:
 
 ```
 
@@ -63,7 +62,7 @@ php codecept.phar run -g admin -g editor
 
 ```
 
-In this case all tests that belongs to groups admin or editor will be executed. Groups concept were taken from PHPUnit and in classical PHPUnit tests they behave just in the same way. To add Cept to the group - use `$scenario` variable:
+В данном случае, будут выполнены все тесты принадлежащие группам admin или editor. Концепция групп взята из PHPUnit и его классических тестов которые ведут себя подобным образом. Чтобы добавить Cept тест к группе, используйте переменную `$scenario`:
 
 ``` php
 <?php
@@ -78,7 +77,7 @@ $I = new WebGuy($scenario);
 $I->wantToTest('admin area');
 ?>
 ```
-For Tests and Cests you can use annotation `@group` to add a test to the group.
+Для классических тестов и Cests тестов, чтобы добавить тест к группе можно использовать аннотацию `@group`.
 
 ``` php
 <?php
@@ -91,9 +90,9 @@ public function testAdminUser()
 }
 ?>
 ```
-Same annotation can be used in Cest classes.
+Та же аннотация может быть использована в Cest классах.
 
-## Cest Classes
+## Cest Классы
 
 In case you want to get a class-like structure for your Cepts, instead of plain PHP, you can use Cest format.
 It is very simple and is fully compatible with Cept scenarios. It means If you feel like your test is long enough and you want to split it - you can easily move it into class. 
