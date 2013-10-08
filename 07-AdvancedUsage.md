@@ -1,25 +1,25 @@
-# Advanced Usage
+# Продвинутое использование
 
-In this chapter we will cover some technics and options that you can use to improve your testing experience and stay with better organization of your project. 
+В данном разделе мы рассмотрим некоторые техники и опции использование которых поможет вам улучшить ваши навыки в тестировании и сохранить качественную организацию вашего проекта.
 
-## Interactive Console
+## Интерактивная консоль
 
-Interactive console was added to try Codeception commands before executing them inside a test. 
-This feature was introduced in 1.6.0 version. 
+Интерактивная консоль добавлена для опробования команд Codeception перед тем, как они будут выполнены внутри тестов.
+Данная возможность была анонсирована  начиная с версии 1.6.0.
 
 ![console](http://img267.imageshack.us/img267/204/003nk.png)
 
-You can execute console with 
+Вы можете запустить консоль с помощью команды
 
 ``` bash
 php codecept.phar console suitename
 ```
 
-Now you can execute all commands of appropriate Guy class and see immidiate results. That is especially useful for when used with Selenium modules. It always takes too long to launch Selenium and browser for tests. But with console you can try different selectors, and different commands, and then write a test that would pass for sure when executed.
+Теперь вы можете выполнять любые команды соответствующего Guy класса и сразу же видеть результаты их выполнения. Это особенно полезно в случае, работы с модулями Selenium. Запуск Selenium и браузера для тестирования обычно занимает довольно продолжительное время. Однако при использовании коносли вы можете попробовать разнообразные селекторы и команды, после чего вы сможете быть уверенны в том, что написаный вами тест выполнится.
 
-And a special hint: show your boss how you can nicely manipulate web pages with console and Selenium. With this you can convince him that it is easy to automate this steps and introduce acceptance testing to the project.
+Полезный совет: покажите начальству, как резво вы манипулируете веб страницами с помощью консоли и Selenium. Так вы сможете убедить его в том, что довольно просто автоматизировать подобные вещи и начать использовать приемочное тестирование в проекте.
 
-## Running from different folders.
+## Запуск из разных каталогов.
 
 If you have several project with Codeception tests in it you can use one `codecept.phar` file to run their tests.
 You can pass a `-c` option to any Codeception command, excluding `bootstrap` to execute codeception in other directory.
