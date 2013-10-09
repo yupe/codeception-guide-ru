@@ -94,16 +94,14 @@ public function testAdminUser()
 
 ## Cest Классы
 
-In case you want to get a class-like structure for your Cepts, instead of plain PHP, you can use Cest format.
-It is very simple and is fully compatible with Cept scenarios. It means If you feel like your test is long enough and you want to split it - you can easily move it into class. 
+В случае, если вы хотите получить class-like структуру ваших Cept тестов, вместо использования простого PHP вы можете использовать Cest формат. Это очень просто и полностью совместимо с Cept сценариями. Если вы считаете, что ваши тесты стали достаточно длинными и вы хотите разбить их на части, вы можете поместить их внутрь класса.
 
-You can start Cest file by running the command:
+Вы можете запустить Cest файл с помощью команды:
 
 ```
 php codecept.phar generate:cest suitename CestName
 ```
-
-The generated file will look like:
+Это сгенерирует файл похожий на этот:
 
 ``` php
 <?php
@@ -125,12 +123,11 @@ class BasicCest
 }
 ?>
 ```
+**Каждый публичный метод Cest класса (кроме, начинающихся с `_`) будет выполнен как тест** куда первым параметром будет передан Guy класс и вторым параметром будет передана переменная `$scenario`. 
 
-**Each public method of Cest (except, those starting from `_`) will be executed as a test** and will receive Guy class as the first parameter and `$scenario` variable as a second. 
+В методах `_before` и `_after`  можно указывать разнообразные настройки которые будут выполнятся до и после тестов данного класса. Это делает Cest тесты более гибкими, чем Cepts тесты которые основываются только на похожих методах в Helper классах.
 
-In `_before` and `_after` method you can use common setups, teardowns for the tests in the class. That actually makes Cest tests more flexible, then Cepts that rely only on similar methods in Helper classes.
-
-As you see we are passing Guy class into `tryToTest` stub. That allows us to write a scenarios the way we did before.
+Как вы могли видеть выше мы передаем класс Guy в метод `tryToTest`. Это позволяет писать сценарии тестирования точно так же, как мы делали это ранее.
 
 ``` php
 <?php
@@ -151,21 +148,20 @@ class BasicCest
 ?>
 ```
 
-But there is a limiation in Cest files. It can't work with `_bootstrap.php` the way we did in scenario tests.
-It was useful to store some variables in bootstraps that should be passed into scenario.
-In Cest files you should inject all external variables manually, using static or global variables.
+Стоит отметить, что при использовании Cest файлов появляются некоторые ограничения. Вы не сможете работать с `_bootstrap.php` так как вы делали это в  Cept тестах. Иногда удобно хранить некоторые переменные, которые должны быть переданы тесту в bootstrap файлах. 
+В файлах Cest вам придется включать все внешние переменные вручную с помощью глобальных или статических переменных.
 
-As a workaround you can choose [Fixtures](https://github.com/Codeception/Codeception/blob/master/src/Codeception/Util/Fixtures.php) class which is nothing more then global storage to your variables. You can pass variables from `_bootstrap.php` or any other place just with `Fixtures::add()` call. But probably you can use Cest classes `_before` and `_after` methods to load fixtures on the start of test, and deleting them afterwards. Pretty useful too.
+В качестве обходного пути можно использовать классы фикстур [Fixtures](https://github.com/Codeception/Codeception/blob/master/src/Codeception/Util/Fixtures.php) которые являются по сути являются глобальным хранилищем переменных. Можно передать любые даныне из `_bootstrap.php` или ил любого другого места с помощью вызова `Fixtures::add()`. Вероятно так ж вы можете использовать в классах Cest методы `_before` и `_after` для загрузки фикстур в начале теста, и их удаления, после его выполнения, что так же довольно удобно.
 
-As you see, Cest class have no parent like `\Codeception\TestCase\Test` or `PHPUnit_Framework_TestCase`. That was done intentionally. This allows you to extend class any time you wnat by attaching any meta-testing class to it's parent. In meta class you can write common behaviors and workarounds that may be used in child class. But don't forget to make them `protected` so they won't be executed as a tests themselves.
+Как вы могли видеть, классы Cest не имеют родителя на подобие `\Codeception\TestCase\Test` или `PHPUnit_Framework_TestCase`. Это сделано нарочно. Это позволяет вам расширять данные классы путем создания общего класса родителя.В данном классе вы можете описать общие поведения и методы, которые в дальнецшем могут быть использованы в унаследованных классах. При этом не забудьте установить для таких методов модификатор `protected` иначе они будут выполнены как тесты.
 
-Also you can define `_failed` method in Cest class which will be called if test finished with `error` or fail.
+В дополнение, вы можете определить метод `_failed` в классах Cest который будет вызван в случае если в тесте произошла ошибка `error` или он 'провалился'.
 
-## Refactoring
+## Рефакторинг
 
-As test base growth they will require refactoring, sharing common variables and behaviors. The classical example for this is `login` action which will be called for maybe every test of your test suite. It's wise to make it written one time and use it in all tests. 
+Во время роста базы тестов может потребоваться их рефакторинг, возможно понадобится выделить некоторые общие поведения и методы. Классический пример - действие `login` которое возможно будет вызываться практически в каждом тесте из тестового набора. Мудрое решение - написать данное действие однажды и использовать его во всех тестах, где это необходимо.
 
-It's pretty obvious that for such cases you can use your own PHP classes to define such methods. 
+Вполне очевидно, что вы можете использовать собственные классы для определения похожих методов. 
 
 ``` php
 <?php class TestCommons 
@@ -184,7 +180,7 @@ It's pretty obvious that for such cases you can use your own PHP classes to defi
 ?>
 ```
 
-This file can be required in `_bootstrap.php` file
+Этот файл затем может быть включен в файл `_bootstrap.php`
 
 ``` php
 <?php
@@ -193,7 +189,7 @@ require_once '/path/to/test/commons/TestCommons.php';
 ?>
 ```
 
-and used in your scenarios:
+и затем может быть использован в ваших сценариях:
 
 ``` php
 <?php
@@ -202,16 +198,16 @@ TestCommons::logMeIn($I);
 ?>
 ``` 
 
-You should get the idea by now. Codeception doesn't provide any particular strategy for you to manage the tests. But it is flexible enough to create all the support classes you need for your test suites. The same way, with custom classes you can implement `PageObject` and `StepObject` patterns.
+Теперь идея должна быть вам понятна. Codeception не обеспечивает единой стратегии при управлении тестами. Однако он достаточно гибок и позволяет создавать любые необходимые классы которые могут понадобиться вам во время тестирования. Используя похожий подход вы можете реализовать паттерны `PageObject` и `StepObject`.
 
-## PageObject and StepObjects
+## PageObject и StepObjects
 
-In next versions Codeception will provide PageObjects and StepObjects out of the box. 
-But today we encourage you to try your own implementations. Whe have some nice blogpost for you to learn what are PageObjects, why you ever want to use them and how they can be implemented.
+В следующих версиях Codeception будет использовать PageObjects и StepObjects из коробки.
+Однако сейчас вы можете попробовать реализовать ваши собственные версии данных объектов. У нас есть пара отличных сатей на данную тему, обратившись к которым вы сможете разобраться в том что же такое PageObjects, почему вы захотите их использовать и как они могут быть реализованы.
 
-* [Ruling the Swarm (of Tests)](http://phpmaster.com/ruling-the-swarm-of-tests-with-codeception/) by Michael Bodnarchuk.
-* [Implementing Page Objects in Codeception](http://jonstuff.blogspot.ca/2013/05/implementing-page-objects-in.html) by Jon Phipps.
+* [Управления стаями (тестов)](http://phpmaster.com/ruling-the-swarm-of-tests-with-codeception/) by Michael Bodnarchuk.
+* [Реализация Page Objects в Codeception](http://jonstuff.blogspot.ca/2013/05/implementing-page-objects-in.html) by Jon Phipps.
 
-## Conclusion
+## Заключение
 
-Codeception is a framework which may look simple at first sight. But it allows you to build powerful test with one  APIs, refactor them, and write them faster using interactive console. Codeception tests can easily be organized with groups or cest classes. Probably too much abilities for the one framework. But nevertheless Codeception follows the KISS pricinple: it's easy to start, easy to learn, easy to extend. 
+Codeception - фреймворк, который на первый взгляд выглядит довольно просто. Однако он позволяет создавать достаточно мощные тесты имеющие единый API, рефакторить их и писать тесты быстрее используя интерактивную консоль. Тесты Codeception легко могут быть организованны в группы или в классы `Cest`. Вероятно это достаточно большой функционал для одного фреймворка. Не смотря на это Codeception следует принипу KISS: его просто изучить, просто использовать, просто расширять. 
