@@ -7,7 +7,7 @@
 
 ## Простой сценарий
 
-Наверняка первым сценарием, который вы захотите запустить будет авторизация пользователя. Чтобы написать такой сценарий вам необходимы базовые знания HTML и PHP.
+Наверняка, первым сценарием, который вы захотите запустить, будет авторизация пользователя. Чтобы написать такой сценарий вам необходимы базовые знания HTML и PHP.
 
 ```php
 <?php
@@ -40,11 +40,11 @@ $ php codecept.phar generate:scenarios
 
 Сгенерированные сценарии сохраняются в каталоге "data" основного каталога с тестами
 
-This scenario can be performed either by a simple PHP browser or by a browser through Selenium (also Sahi or ZombieJS). We will start writing our first acceptance tests with a PHP Browser. This is a good place to start If you don't have experience working with Selenium Server or Sahi. 
+Этот сценарий может быть выполнен как PHP-браузером, так и обычным браузером через Selenium (или Sahi или ZombieJS). Мы начнем написание приемочных тестов с использованием PHP-браузера. Если у вас не было опыта работы с Selenium или Sahi - сервером - PHP-браузер будет хорошим выбором для начала. 
 
-## PHP Browser
+## PHP-браузер
 
-This is the fastest way to run acceptance tests, since it doesn't require running an actual browser. We use a PHP web spider, which acts like a browser: it sends a request, then receives and parses the response. For such a browser Codeception uses [Goutte Web Scrapper](https://github.com/fabpot/Goutte) driven by [Mink](http://mink.behat.org). Unlike common browsers Goutte has no rendering or javascript processing engine, so you can't test actual visibility of elements, or javascript interactions. The good thing about Goutte is that it can be run in any environment, with just PHP required.
+Это наиболее простой и быстрый способ запустить приемочные тесты, так как он не требует фактического запуска браузера. We use a PHP web spider, which acts like a browser: it sends a request, then receives and parses the response. For such a browser Codeception uses [Goutte Web Scrapper](https://github.com/fabpot/Goutte) driven by [Mink](http://mink.behat.org). Unlike common browsers Goutte has no rendering or javascript processing engine, so you can't test actual visibility of elements, or javascript interactions. The good thing about Goutte is that it can be run in any environment, with just PHP required.
 
 Before we start we need a local copy of the site running on your host. We need to specify the url parameter in the acceptance suite config (tests/acceptance.suite.yml).
 
