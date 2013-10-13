@@ -1,11 +1,11 @@
-# Modules and Helpers
+# Модули и помощники
 
-Codeception uses modularity to create a comfortable testing environment for every test suite you write. 
-Modules allow you to choose the actions and assertions that can be performed in tests.
+Codeception использует модульность для того чтобы создать комфортное тестовое окружение для каждого написанного вами набора тестов.
+Модули позволяют выбрать действия и утверждения, которые будут выполнены в тестах.
 
-All actions and assertions that can be performed by the Guy object in a class are defined in modules. It might look like Codeception limits you in testing, but it's not true. You can extend the testing suite with your own actions and assertions, writing them into a custom module.
+Все действия и утверждения, которые будут выполнены "объектом-парнем" объявлены в модулях. Это может выглядеть будто Codeception ограничивает вас в тестировании, но это не правда. Вы можете расширить набор тестов своими собственными действиями и утверждениями, описав их в своем модуле.
 
-Let's look at this test.
+Давайте посмотрим на этот тест.
 
 ``` php
 <?php
@@ -18,10 +18,10 @@ $I->seeFileFound('running.lock');
 ?>
 ```
 
-It can operate with different entities: the web page can be loaded with the Symfony1 module, the database assertion uses the Db module, and file state can be checked with the Filesystem module. 
+Тест может оперировать различными сущностями: страница может быть загружена с помощью модуля Symfony1, база данных проверена с помощью модуля Db, а наличие файла может быть с помощью модуля Filesystem.
 
-Modules are attached to Guy classes in the suite config.
-For example, in `tests/functional.suite.yml` we should see.
+Модули привязан к классам "Парней" c помощью файла настроек тестового набора.
+Например, в `tests/functional.suite.yml` мы можем увидеть.
 
 ```yaml
 class_name: TestGuy
@@ -29,27 +29,26 @@ modules:
     enabled: [Symfony1, Db, Filesystem]
 ```
 
-The TestGuy class has its methods defined in modules. Actually, it doesn't contain any of them, but acts as a proxy for them. It knows which module executes this action and passes parameters into it. To make your IDE see all of the TestGuy methods, you use the `build` command. It generates the definition of the TestGuy class by copying the signatures from the configured modules.
+У класса `TestGuy` есть методы объявленные в модулях. На самом деле, класс не содержит все эти методы, но он выступает в качестве прокси для них. Он знает какой модуль выполняет данное действие и передает ему параметры. Чтобы ваша IDE могла видеть все методы класса `TestGuy` используйте команду `build`. Команда генерирует определение класса `TestGuy`, копируя сигнатуры методов из настроенных модулей.
 
-## Standard Modules
+## Стандартные модули
 
-Codeception has many bundled modules which will help you run tests for different purposes and in different environments. The number of modules is not constant -- it's supposed to grow as more frameworks and ORMs are supported.
-See all of them listed in the right of the page at sidebar.
+У Codeception в комплекте есть много модулей, которые могут помочь вам запускать тесты для разных целей и в разных тестовых окружениях. Количество модулей не постоянное -- оно должно расти с увеличением поддерживаемых фреймворков и ORM.
+Весь список можно увидеть в сайдбаре правой части страницы.
 
-All of these modules are documented. You can review their detailed references on [GitHub](https://github.com/DavertMik/Codeception/tree/master/docs/modules).
+Все модуи документированы. Вы можете ознакомиться с их детальным описанием на странице [GitHub](https://github.com/DavertMik/Codeception/tree/master/docs/modules). 
 
-## Helpers
+## Помощники
+Codeception не ограничивает вас в использовании модулей только из основного репозитория. Несомненно, в вашем проекте вы можете захотеть добавить собственные действия в тестовые наборы. Запустив команду `bootstrap`, Codeception сгенерирует для вас три заготовленных модуля, по одному для каждого набора. Эти модули называются 'Помощниками', их можно найти по следующему пути `tests/helpers`. 
 
-Codeception doesn't restrict you to only the modules from the main repository. No doubt your project might need your own actions added to the test suite. By running the `bootstrap` command, Codeception generates three dummy modules for you, one for each of the newly created suites. These custom modules are called 'Helpers', and they can be found in the `tests/helpers` path. 
+Это хорошая практика определять недостающие действия или команды утверждения (assertion) в помощниках.
 
-It's a good idea to define missing actions or assertion commands in helpers. 
-
-Let's say we are going to extend the TestHelper class. By default it's linked with a TestGuy class and a functional test suite.
+Скажем, мы собираемся расширить класс `TestHelper`. По умолчанию он связан с классом `TestGuy` и набором функциональных тестов.
 
 ``` php
 <?php
 namespace Codeception\Module;
-// here you can define custom functions for TestGuy
+// здесь вы можете объявить свои собственные функции для TestGuy
 
 class TestHelper extends \Codeception\Module
 {
@@ -57,18 +56,18 @@ class TestHelper extends \Codeception\Module
 ?>
 ```
 
-As for actions, everything is quite simple. Every action you define is a public function. Write any public method, run the `build` command, and you will see the new function added into the TestGuy class. Note: Public methods prefixed by `_` are treated as hidden and won't be added to your Guy class. 
+Что касается действий, все очень просто. Каждое действие, которое вы определяете является публичной функцией. Опишите публичную функцию, запустите команду `build` и вы увидите, что добавлена новая функция в класс `TestGuy`. Примечание: публичные методы с префиксом `_` рассматриваются как скрытые и не будут добавлены в класс вашего "Парня".
 
-Assertions can be a bit tricky. First of all, it's recommended to prefix all your assert actions with `see` or `dontSee`. In Codeception philosophy, all tests are performed by humans, i.e. guys. The expected result they see (or don't see) is what we use for the assertion.
+С утверждениями немного сложнее. В первую очередь, рекомендуется добавлять префикс `see` или `donSee` для всех утверждающих действий. В философии Codeception, все тесты выполняются людьми, например "парнями". Ожидаемый результат, который они видят (или не видят) это то, что мы используем для утверждения.
 
-Name your assertions like this:
+Называйте ваши утверждения подобным образом:
 
 ```php
 seePageReloaded();
 seeClassIsLoaded($classname);
 dontSeeUserExist($user);
 ```
-And then use them in your tests:
+И затем используйте их в своих тестах:
 
 ```php
 <?php
@@ -79,10 +78,10 @@ $I->dontSeeUserExist($user);
 ?>
 ```
 
-Every `see` or `dontSee` function requires at least one assert. Codeception uses PHPUnit assertions.
+Каждая `see` или `dontSee` функция требует по крайней мере одно утверждение. Codeception использует утверждения из PHPUnit.
 
-You can define asserts by using assertXXX methods of module.
-Codeception uses PHPUnit asserts. So in case you miss some of asserts you can use PHPUnit static methods from the `PHPUnit_Framework_Assert` class for more.
+Вы можете объявлять утверждения используя `asertXXX` методы модуля.
+Codeception использует утверждения из PHPUnit. Таким образом, в случае когда вам не хватает некоторых утверждений, вы можете использовать статичные методы PHPUnit из класса `PHPUnit_Framework_Assert`.
 
 ``` php
 <?php
@@ -90,13 +89,13 @@ Codeception uses PHPUnit asserts. So in case you miss some of asserts you can us
 function seeClassExist($class)
 {
     $this->assertTrue(class_exists($class));
-    // or
+    // или
     \PHPUnit_Framework_Assert::assertTrue(class_exists($class));
 }
 ?>
 ```
 
-In your helpers you can use these assertions:
+В ваших помощниках вы можете использовать эти утверждения:
 
 ``` php
 <?php
@@ -114,9 +113,9 @@ function seeCanCheckEverything($thing)
 ?>
 ```
 
-Just type `$this->assert` to see all of them.
+Просто введите `$this->assert` чтобы увидеть их все.
 
-Also each module has special `$this->assert` and `$this->assertNot` methods. They both take the same arguments and are useful if you need to define both positive and negative assertions in your module. These functions take an array as a parameter, where the first value of the array is the name of the PHPUnit assert function.
+Так же, у каждого модуля есть специальные методы `$this->assert` и `$this->assertNot`. Оба метода принимают одинаковые параметры и полезны если вам нужно объявить как положительное так и отрицательное утверждение в вашем модуле. Эти функции принимают массив как параметр, где первое значение массива это название функции утверждения из PHPUnit.
 
 ```php
 <?php
@@ -126,7 +125,7 @@ $this->assertNot(array('internalType',$int,'bool'));
 $this->assert(array('Contains', array(3,5,9), 3));
 ?>
 ```
-Let's see how to define both `see` and `dontSee` actions without code duplication.
+Давайте посмотрим как определить оба `see` и `dontSee` действия  без дублирования кода.
 
 ```php
 <?php
@@ -147,22 +146,22 @@ protected function proceedSeeClassExist($class)
 }
 ?>
 ```
-For `dontSeeClassExist`, the `assertFalse` will be called.
+Для `dontSeeClassExist`, будет вызван `assertFalse`.
 
-### Resolving Collisions
+### Разрешение конфликтов
 
-What happens if you have two modules which contain the same named actions?
-Codeception allows you to override actions by changing the module order.
-The action from the second module will be loaded and the action from the first will be ignored.
-The order of the modules can be defined in the suite config.
+Что случится если у вас есть два модуля, которые содержат действия с одинаковыми названиями?
+Codeception позволяет вам переопределять действия меняя порядок модулей.
+Действие из второго модуля будет загружено, а действие из первого модуля будет проигнорировано.
+Порядок модулей описывается в файле настроек тестового набора.
 
-### Connecting Modules
+### Взаимодействие Модулей
 
-It's possible that you will need to access internal data or functions from other modules. For example, for your module you might need a connection from Doctrine, or a web browser from Symfony.
+Возможно, что вы захотите получить доступ к внутренним своствам или функциям из другого модуля. Например, для вашего модуля понадобилось соединение из модуля Doctrine или браузер из модуля Symfony.
 
-Modules can interact with each other through the `getModule` method. Please note that this method will throw an exception if the required module was not loaded.
+Модули могут взаимодействовать с другими модулями через метод `getModule`. Пожалуйста, обратите внимание, что этот метод может выбросить исключение если требуемый модуль не был загружен.
 
-Let's imagine that we are writing a module which reconnects to a database. It's supposed to use the dbh connection value from the Db module.
+Давайте представим, что мы пишем модуль, который переподключается к базе данных. Предположим он использует значение свойства `dbh` из модуля Db.
 
 ```php
 <?php
@@ -174,12 +173,10 @@ function reconnectToDatabase() {
 }
 ?>
 ```
-By using the `getModule` function you get access to all of the public methods and properties of the requested module.
-The dbh property was defined as public specifically to be available to other modules.
-
-That technique may be also useful if you need to perform a sequence of actions taken from other modules.
-
-For example:
+Используя функцию `getModule` вы получаете доступ ко всем публичным методам и свойствам запрошенного модуля.
+Свойство `dbh` было специально объявлено как публичное чтобы быть доступным для других модулей.
+Эта техника так может быть полезна если вам нужно выполнить последовательность действий взятых из других модулей.
+Например:
 
 ```php
 <?php
@@ -193,11 +190,11 @@ function seeConfigFilesCreated()
 ?>
 ```
 
-### Undefined Actions in Helpers
+### Неопределенные действия в помощниках
 
-In case you have an action in test which is not defined yet, you can automatically create a stub method for it in the corresponding helper. To do so, you can use a `analyse` command which scans all tests and searches for actions that do not exist in any of the connected modules.
+В случаи когда у вас есть действие, которое еще не определено, вы можете автоматически создать метод-заглушку для него в соответствующем помощнике. Чтобы это сделать, вы можете использовать команду `analyse`, которая сканирует все тесты и ищет несуществующие действия в любом подключенном модуле.
 
-So, you can assign writing tests to non-technical guys or QAs. In case they lack some actions they define them in test.
+Таким образом, вы можете доверить написание тестов технически не подкованным людям или специалистам по качеству. В случае если им будет недоставать некоторых действий они объявят их в тесте.
 
 ``` php
 <?php
@@ -205,62 +202,62 @@ $I->doManyCoolThings();
 ?>
 ```
 
-By running the `analyze` command you will be asked if you want to add `doManyCoolThings` to current Helper.
+Запустив команду `analyze` у вас спросят, хотите ли вы добавить `doManyCoolThings` в текущий Помощник.
 
 
-### Hooks
+### Хуки
 
-Each module can handle events from the running test. A module can be executed before the test starts, or after the test is finished. This can be useful for bootstrap/cleanup actions.
-You can also define special behavior for when the test fails. This may help you in debugging the issue.
-For example, the PhpBrowser module saves the current webpage to the log directory if the test fails.
+Каждый модуль может обрабатывать события из запущенного теста. Модуль может быть выполнен до начала теста или после его завершения. Это может быть полезно для действий начальной загрузки или завершающих действий.
+Вы так же можете определить специальное поведение для ситуации когда тест провален. Это может быть полезно отладке.
+Например, модуль PhpBrowser сохраняет текущую страницу в директорию `log` если тест провален.
 
-All hooks are defined in `\Codeception\Module` and are listed here. You are free to redefine them in your module.
+Все хуки определены в `\Codeception\Module` и перечислены здесь. Вы вольны переопределить их в своем модуле.
 
 ```php
 <?php
 
-    // HOOK: used after configuration is loaded
+    // ХУК: используется после загрузки настроек
     public function _initialize() {
     }
 
-	// HOOK: on every Guy class initialization
+	// Хук: при каждой инициализация класса ”Парня”
 	public function _cleanup() {
 	}
 
-	// HOOK: before each step
+	// ХУК: перед каждым шагом
 	public function _beforeStep(\Codeception\Step $step) {
 	}
 
-	// HOOK: after each  step
+	// Хук: после каждого шага
 	public function _afterStep(\Codeception\Step $step) {
 	}
 
-	// HOOK: before test
+	// Хук: перед началом теста
 	public function _before(\Codeception\TestCase $test) {
 	}
 
-	// HOOK: after test
+	//Хук: после завершения теста
 	public function _after(\Codeception\TestCase $test) {
 	}
 
-	// HOOK: on fail
+	//Хук: при провале теста
 	public function _failed(\Codeception\TestCase $test, $fail) {
 	}
 ?>
 ```
 
-Please note that methods with a `_` prefix are not added to the Guy class. This allows them to be defined as public, but used only for internal purposes.
+Пожалуйста, обратите внимание методы с префиксом `_` не добавлены в класс "Парня". Это позволяет объявлять публичные методы, но использовать только для внутренних целей.
 
-### Debug
+### Отладка
 
-As we mentioned, the `_failed` hook can help in debugging a failed test. You have the opportunity to save the current test's state and show it to the user.
+Как мы уже упоминали, хук `_failed` может помочь в отладке проваленного теста. У вас есть возможность сохранить текущее состояние тестов и показать их пользователю.
 
-But you are not limited to this. Each module can output internal values that may be useful during debug.
-For example, the PhpBrowser module prints the response code and current URL every time it moves to a new page.
-Thus, modules are not black boxes. They are trying to show you what is happening during the test. This makes debugging your tests less painful.
+Вы не ограничены этим. Каждый модуль может выводить внутренние значения, которые могут быть полезны при отладке.
+Например, модуль PhpBrowser выводит http код ответа и текущий адрес каждый раз когда он переходит на новую страницу.
+Таким образом, модули не являются "черными ящиками". Они пытаются показать вам, что происходит в время теста. Это делает отладку ваших тестов менее болезненной.
 
-To display additional information, use the `debug` and `debugSection` methods of the module.
-Here is an example of how it works for PhpBrowser:
+Чтобы вывести дополнительную информацию, используйте `debug` и `debugSection` методы модуля.
+Вот пример того, как это работает для PhpBrowser:
 
 ```php
 <?php
@@ -270,7 +267,7 @@ Here is an example of how it works for PhpBrowser:
 ?>    
 ```
 
-This test, running with PhpBrowser module in debug mode, will print something like this:
+Этот тест запущенный с помощью модуля PhpBrowser в режиме отладке, выведет что-то похожее на это:
 
 ```bash
 I click "All pages"
@@ -278,10 +275,10 @@ I click "All pages"
 * Response code: 200
 ```
 
-### Configuration
+### Настройка
 
-Modules can be configured from the suite config file, or globally from `codeception.yml`.
-Mandatory parameters should be defined in the `$requiredFields` property of the module class. Here how it is done in the Db module
+Модули могут быть настроены в файле настроек тестового набора или глобально в `codeception.yml`. 
+Обязательные параметры должны быть определены в `$requiredFields` свойстве класса модуля. Вот как это сделано в модуле Db.
 
 ```php
 <?php
@@ -289,9 +286,9 @@ class Db extends \Codeception\Module {
     protected $requiredFields = array('dsn', 'user', 'password');
 ?>
 ```
-The next time you start the suite without setting these values, an exception will be thrown. 
+Следующий раз вы когда запустите набор тестов без установки эти значений будет выброшено исключение.
 
-For optional parameters, you should set default values. The `$config` property is used to define optional parameters as well as their values. In the Selenium module we use the default Selenium Server address and port. 
+Для необязательных параметров, вы должны установить значения по умолчанию. Свойство `$config` используется чтобы определить необязательные параметры, а так же их значения. В модуле Selenium мы используем адрес и порт сервера по умолчанию.
 
 ```php
 <?php
@@ -302,7 +299,7 @@ class Selenium extends \Codeception\Util\MinkJS
 ?>    
 ```
 
-The host and port parameter can be redefined in the suite config. Values are set in the `modules:config` section of the configuration file.
+Параметры адрес и порт могут быть переопределены в настройках набора тестов. Значения устанавливаются в секции `modules:config` файла настроек.
 
 ```yaml
 modules:
@@ -318,14 +315,14 @@ modules:
             repopulate: false
 ```
 
-Optional and mandatory parameters can be accessed through the `$config` property. Use `$this->config['parameter']` to get its value. 
+Обязательные и необязательные параметры могут доступны через свойство `$config`. Используйте `$this->config['parameter']` чтобы получить значение параметра.
 
-### Dynamic Configuration
+### Динамическая настройка
 
-*new in 1.6.2*
+*начиная с версии 1.6.2*
 
-If you want to reconfigure module in run time, you can use the `_reconfigure` method of the module.
-You may call it from helper class and pass there all the fields you want to change.
+Если вы хотите переопределить настройки модуля во время исполнения, вы можете использовать `_reconfigure` метод модуля.
+Вы можете вызвать его из класса помощника и передать в него все поля, которые хотите изменить.
 
 ``` php
 <?php
@@ -333,12 +330,12 @@ $this->getModule('Selenium2')->_reconfigure(array('browser' => 'chrome'));
 ?>
 ```
 
-By the end of a test all your changes will be rolled back to values to config values.
+В конце теста все ваши изменения откатятся до значений из файла настроек.
 
-## Conclusion
+## Заключение
 
-Modules are the true power of Codeception. They are used to emulate multiple inheritance for Guy classes (CodeGuy, TestGuy, WebGuy, etc).
-Codeception provides modules to emulate web requests, access data, interact with popular PHP libraries, etc.
-For your application you might need custom actions. These can be defined in helper classes.
-If you have written a module that may be useful to others, share it.
-Fork the Codeception repository, put the module into the `src/Codeception/Module` directory, and send a pull request. Many thanks if you do so.
+Модули это настоящая мощь Codeception. Они используются для эмуляции множественного наследования для классов "Парней" (CodeGuy, TestGuy, WebGuy, и так далее).
+Codeception предоставляет модули для эмуляции запросов, доступа к данным, взаимодействия с популярными PHP библиотеками.
+Для вашего приложения вы можете определить собственные действия. Они могут быть определены в классах помощниках.
+Если вы написали модуль, который может быть полезен другим, поделитесь им.
+Сделайте форк репозитория Codeception, поместите модуль в директорию `src/Codeception/Module` и пришлите pull request. Большое спасибо если вы это сделаете.
