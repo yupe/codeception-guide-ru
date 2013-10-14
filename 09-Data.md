@@ -1,15 +1,15 @@
-# Working with Data
+# Работа с данными
 
-Tests should not affect each other. That's a rule. When tests interact with databases they may change data inside them. This leads to data inconsistency. A test may try to insert a record that is already inserted, or retrieve a deleted record. To avoid test failures, the database should be brought to it's initial state. Codeception has different methods and approaches to get your data cleaned.
+Тесты не должны ломать другие тесты. Таковы правила. Тесты могут изменять данные при работе с БД. Это может привести к рассогласованию данных. Тест может попытаться вставить запись которая уже существует, или восстановить уже удаленную запись. Для предотвращения провала тестов по данным причинам, база данных должна быть возвращена в исходное состояние. Codeception использует несколько разных методов и подходов для реализации такой возможности.
 
-This chapter summarizes all of the notices on clean ups from previous chapters and suggests the best strategies to choose data storage backends.
+Данный раздел объединяет всю информацию об работе с данными из предидущих разделов и предлагает лучшие решения для управления базами данных в ваших тестах.
 
-When we choose to clean up a database, we should make this cleaning as fast as possible. Tests should always run fast. Rebuilding the database from scratch is not the best way, but might be the only one. In any case, you should use a special test database for testing. Do not ever test on a development or production database!
+Когда мы собираемся очистить базу данных, мы должны сделать это как можно быстрее. Тесты всегда должны выполняться быстро. Восстановление базы с нуля не лучший путь, хотя иногда единственный. В любом случае, вы должны использовать отдельную базу данных для тестирования. Не в коем случае не используйте development или production базы при тестировании!
 
-## Manual Cleanup
+## Ручная очистка
 
-You could possibly create records at the beginning of test and delete them afterwards. This is cool option if you don't have shared data between tests.
-But you shouldn't put any code into your test file. Because test files are parsed two times: for analysis and execution, this may lead to unpredictable results. So, you should specify when do you want your code to be executed. It's a good idea to create data before the analysis and remove data after the test is finished. Use the special methods `running()` and `preload()` of `$scenario` object to determine the current object state.
+Ни что не мешает вам создавать записи перед выполнением теста и удалять их после. Это довольно хорошее решение, если вы не имеете совместно используемых несколькими тестам данных.
+Однако не следует добавлять подобный код в файл теста. Все потому, что тесты выполняются дважды: с целью анализа и для непосредственно выполнения, таким образом это может привести к неожиданным результатам. Таким образом вы должны указать место, где ваш код будет выполнен. Хорошая идея, добавить данные перед анализом и удалить после того как тест выполнен. Используйте специальные методы объекта `$scenario`: `running()` и `preload()` для определения текущего состояния.
 
 ``` php
 <?php
@@ -28,12 +28,11 @@ if ($scenario->running()) {
 }
 ?>
 ```
+Таким образом вы можете вставить любой код в ваши тесты. Однако не забывайте указывать шаг на котором ваш код должен быть включен, иначе он будет выполнен дважды!
 
-Similarly you can insert any code before into your test. But please explicitly set the stage when you need it to be included, or the code will be executed twice!
+## Автоматическая очистка
 
-## Automatic Cleanup
-
-Codeception has a Db module, which takes on most of the tasks of database interaction. By default it will try to repopulate the database from a dump and clean it up after each test. This module expects a database dump in SQL format. It's already prepared for configuration in codeception.yml
+Codeception имеет Db модуль, позволяющий производить с базой данных большинство необходимых действий. По умолчанию он будет пытаться заполнить базу, данными из дампа, и очистить ее после выполнения каждого теста. Данный модуль использует дампы баз данных в SQL формате. Он включен в файл конфигурации codeception.yml и готов для настройки.
 
 ```yaml
 modules:
@@ -45,21 +44,21 @@ modules:
             dump: tests/_data/your-dump-name.sql
 ```
 
-After you enable this module in your test suite, it will automatically populate the database from a dump and repopulate it on each test run. These settings can be changed through the _populate_ and _cleanup_ options, which may be set to disabled.
+После включения данного модуля он автоматически будет заполнять базу из дампа и перезаполнять ее после запуска каждого теста. Данные настройки могут быть изменены с помощью опций _populate_ and _cleanup_, которые могут быть отключены.
 
-The Db module is a rough tool. It works for any type of database supported by PDO. It could be used for all of the tests if it wasn't so slow. Loading a dump can take a lot of time that can be saved by using other techniques. When your test and application share the same connection, as may be the case in functional and unit tests, the best way to speed up everything is either to put all of the code in transactions or use SQLite Memory. When database interactions are performed through different connections, as we do in acceptance tests, the best solution we can propose is to use an SQLite file database, replacing it instead of rebuilding it after each test.
+Модуль Db довольно полезный инструмент. Он работает с любыми базами данных пооддерживающими PDO. Он моет быть использован с любыми тестами, если они не являются довольно медленными. Загрузка дампа может занять продолжительное время, поэтому для данной цели могут быть использованы и другие подходы. В случае, если ваши тесты используют одно подключение, как это может быть при функциональном и модульном тестировании, лучший способ ускорить их, использование транзакций или базы SQLite. Когда для работы с базами данных используются несколько подключений, как это бывает в приемочных тестах, лучшим решением является использование базы данных SQLite, с последующие ее заменой после каждого теста, вместо заполнения и очистки.
 
-## Separate connections
+## Независимые подключения
 
-In acceptance tests, your test is interacting with the application through a web server. There is no way to receive a database connection from the web server. This means that the test and the application will work with the same database but on different connections. Provide in the Db module the same credentials that your application uses, and then you can access the database for assertions (`seeInDatabase` actions) and perform automatic cleanups.
+В приемочных тестах, ваши тесты взаимодействуют с приложением через веб-сервер. В данном случае нет возможности получить экземпляр подключения к базе данных от сервера. Это значит, что тесты и приложение будут работать с одной базой данных но использую разные подключения. Указав в модуле Db такие же настройки подключения к базе данных что и у приложения появляется возможность проверять данные в базе (`seeInDatabase` действия) и использовать автоматическую очистку базы данных.
 
-### Speedup with SQLite
+### Ускорение с помощью SQLite
 
-To speed up testing, we recommend that you try using SQLite in your application, converting your database dump to SQLite format. Use one of the [provided tools](http://www.sqlite.org/cvstrac/wiki?p=ConverterTools).
+Для ускорения ваших тестов мы рекомендуем вам попробовать использовать SQLite. Для конвертации вашего дампа в формат  SQLite. Используйте одну из [описанных утилит](http://www.sqlite.org/cvstrac/wiki?p=ConverterTools).
 
-Keep in mind that columns in SQLite are case-sensitive, so it's important to set `COLLATE NOCASE` for each text and varchar column.
+Помните, что поля в SQLite чувствительны к регистру, поэтому необходимо установить `COLLATE NOCASE` для каждого text и varchar поля.
 
-Store the SQLite test database in the __tests/_data__ directory, and point the Db module to it too:
+Сохраните SQLite базу данных в каталог __tests/_data__, и укажите ее в модуле Db:
 
 ```yaml
 modules:
@@ -71,20 +70,20 @@ modules:
             dump: tests/_data/sqlite_dump.sql
 ```
 
-Before the test suite is started, the SQLite database is created and copied. After each test, the copy replaces the database and a reconnection is done. 
+Перед запуском тестов база данных SQLite будет создана и скопирована. После выполнения каждого теста, копия заменит базу данных. 
 
-## Shared connections
+## Совместные подключения
 
-When an application or it's parts are run within the Codeception process, you can use your application connection in your tests. 
-If you can access the connection, all database operations can be put into one global transaction and rolled back at the end. That will dramatically improve performance. Nothing will be written to the database at the end, thus no database repopulation is actually needed.
+Когда ваше приложение или его часть запущены внутри Codeception, вы можете использовать подключение созданное вашим приложением внутри тестов.
+Если вы может получить доступ к подключению, значит все операции могут быть вынесены в одну глобальную транзакцию и могут быть отменены после выполнения тестов. Это значительно увеличит быстродействие. Ни чего не будет записано в базу данных по окончанию тестирования, таким образом перезаполнение базы данных больше не нужно.
 
-### ORM modules
+### ORM модули
 
-If your application is using an ORM like Doctrine or Doctrine2, connect the respective modules to the suite. By default they will cover everything in a transaction. If you use several database connections, or there are transactions not tracked by the ORM, that module will be useless for you.
+Если ваше приложение использует ORM, такие как Doctrine или Doctrine2, подключите соответствующие модули Codeception к вашим тестам. По умолчанию они будут оборачивать все в транзакции. Если вы используете несколько подключений или транзакции не поддерживаются используемой ORM, данный модуль будет для вас бесполезен.
 
-An ORM module can be connected with a Db module, but by default both will perform cleanup. Thus you should explicitly set which module is used:
+ORM модуль может быть подключен используя Db модуль, но по умолчанию оба будут выполнять очистку. Поэтому вы должны конкретно указать, какой модуль использовать:
 
-In __tests/functional.suite.yml__:
+В __tests/functional.suite.yml__:
 
 ```yaml
 modules:
@@ -94,14 +93,14 @@ modules:
 			cleanup: false
 ```
 
-Still, the Db module will perform database population from a dump before each test. Use `populate: false` to disable it.
+В данном случае модуль Db все еще будет заполнять базу перед выполнением каждого теста. Используйте `populate: false` чтобы отключить эту возможность.
 
-### Dbh module
+### Dbh модуль
 
-If you use PostgreSQL, or any other database which supports nested transactions, you can use the Dbh module. It takes a PDO instance from your application, starts a transaction at the beginning of the tests, and rolls it back at the end.
-A PDO connection can be set in the bootstrap file. This module also overrides the `seeInDatabase` and `dontSeeInDatabase` actions of the Db module.
+Если вы используете PostgreSQL, или любую другую базу данных поддерживающую вложенные транзакции вы можете использовать модуль Dbh. Он получает PDO объект из вашего приложения, запускает транзакции в начале теста, и откатывает их по его окончанию.
+PDO подключение может быть установлено в bootstrap файле. Кроме того, этот модуль перезаписывает действия `seeInDatabase` и `dontSeeInDatabase` модуля Db.
 
-To use the Db module for population and Dbh for cleanups, use this config:
+Для использования Db модуля для заполнения данных и Dbh для очистки, используйте следующий конфигурационный файл:
 
 ```yaml
 modules:
@@ -111,17 +110,17 @@ modules:
 			cleanup: false
 ```
 
-Please, note that Dbh module should go after the Db. That allows the Dbh module to override actions.
+Запомните, модуль Dbh должен быть указан после модуля Db. Это позволит модулю Dbh перезаписывать действия.
 
-## Fixtures
+## Фикстуры (Fixtures)
 
-Fixtures are sample data that we can use in tests. This data can be either generated, or taken from a sample database. Fixtures should be set in the bootstrap file. Depending on the suite, fixture definitions may change. 
+Фикстуры - это наборы данных используемых тестами. Эти данные могут быть сгенерированы или получены из базы данных. Фикстуры должны быть заданы в bootstrap файле. В зависимости от типов тестов suite, объявление фикстур может отличаться. 
 
-#### Fixtures for Acceptance and Functional Tests
+#### Фикстуры для Acceptance и Functional тестов
 
-Fixtures for acceptance and functional tests fixtures can be simply defined and used.
+Использование фикстур в acceptance и functional тестах могут быть довольно просто определены и использованы.
 
-Fixture definition in __bootstrap.php_
+Объявление фикстуры в __bootstrap.php_
 ```php
 <?php
 // let's take user from sample database. 
@@ -131,7 +130,7 @@ $davert = Doctrine::getTable('User')->findOneBy('name', 'davert');
 ?>
 ```
 
-Fixture usage in a sample acceptance or functional test.
+Использование фикстуры в acceptance или functional тестах.
 
 ```php
 <?php
@@ -141,15 +140,15 @@ $I->see('Welcome, Davert');
 ?>
 ```
 
-All variables from the bootstrap file are passed to the _Cept_ files of the testing suite. 
+Все переменные из bootstrap передаются _Cept_ файлам в тестового набора. 
 
-You can use the [Faker](https://github.com/fzaninotto/Faker) library to create tested data within a bootstrap file.
+Вы можете использовать библиотеку [Faker](https://github.com/fzaninotto/Faker) для создания тестовых данных в bootstrap файле.
 
-#### Fixtures for Unit Tests.
+#### Фикстуры в Unit тестах.
 
-Passing fixtures to _Cest_ files is a bit harder, since you can't pass a variable into the class. So a special registry class `Fixtures` is used.
+Передача фикстур _Cest_ файлам немного сложнее, потому как вы не можете передать переменную внутрь класса. Поэтому для данных целей случит специальный класс `Fixtures`.
 
-Fixture definition in __bootstrap.php_ for a unit test suite.
+Объявление фикстур в файле __bootstrap.php_ для unit тестов.
 
 ```php
 <?php
@@ -158,7 +157,7 @@ Fixtures::add('davert', Doctrine::getTable('User')->findOneBy('name', 'davert'))
 ?>
 ```
 
-In a sample unit test:
+Использование в простом unit тесте:
 
 ```php
 <?php
@@ -169,10 +168,9 @@ $I->execute(function () {
 $I->seeResultEquals('davert');
 ?>
 ```
+Классы фикстур хранят и получают значение любой переменной по ее ключу. Вы можете расширить это при помощи добавления пространства имен.
 
-The Fixtures class stores and retrieves any variable by key. You can extend it by adding namespaces.
-
-In __bootstrap.yml_
+В файле __bootstrap.yml_
 
 ```php
 <?php
@@ -198,7 +196,7 @@ MyFixtures::add('user', 'davert', Doctrine::getTable('User')->findOneBy('name', 
 ```
 
 
-In a test:
+Внутри теста:
 
 ```php
 <?php
@@ -211,10 +209,9 @@ $I->execute(function () {
 $I->seeResultEquals('davert');
 ?>
 ```
+Использование фикстур упрощает ваш тестовый код. Именуйте фикстуры со смыслом и ваши тесты станут значительно читабельней.
 
-Using fixtures simplifies your testing code. Name your fixtures wisely and your tests will gain in readability.
+## Заключение
 
-## Conclusion
-
-Codeception is not abandoning the developer when dealing with data. Tools for database population and cleanups are bundled within the Db module.
-To manipulate sample data in a test, use fixtures that can be defined within the bootstrap file.
+Codeception не отказывает в помощи разработчику при работе с данными. Инструменты для очистки и заполнения базы данных находятся в модуле Db.
+Для манипуляций с данными в ваших тестах используйте фикстуры, объявленные в bootstrap файле.
