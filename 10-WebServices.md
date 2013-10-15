@@ -1,21 +1,22 @@
-# Testing WebServices
+# Тестирование Веб Сервисов
 
-The same way we tested a web site Codeception allows you to test web services. They are very hard to test manually, so it's really good idea to automate web service testing. As a standards we have SOAP and REST which are represented in corresponding modules. We will cover them in this chapter.
+Точно так же, как вы тестируете свой сайт, Codeception позволяет тестировать веб сервисы. Достаточно сложно тестировать их вручную, поэтому автоматизация тестирования в данном случае, является достаточно хорошей идеей.
+В Codeception имеется поддержка двух стандартов, SOAP и REST, представленных соответствующими модулями, которые и будут рассмотрены в данной статье.
 
-You should start with creating a new test suite, which was not provided by the `bootstrap` command. We recommend to call it **api** and use the ApiGuy class for it.
+Для начала, вам необходимо создать новый тестовый набор, который не предоставляется командой `bootstrap`. Мы рекомендуем назвать его **api** и использовать для него класс ApiGuy.
 
 ```
 $ php codecept.phar generate:suite api ApiGuy
 ```
 
-We will put all the api tests there.
+Там мы будем вставлять все наши api тесты.
 
 
 ## REST
 
-The REST web service is accessed via HTTP with standard methods: GET, POST, PUT (PATCH), DELETE. They allow to receive and manipulate entities from the service. Accessing WebService requires an HTTP client, so for using it you need the module `PhpBrowser` or one of framework modules set up. For example, we can use the Symfony2 module for Symfony2 applications in order to ignore web server and test web service internally.
+REST веб сервис работает через HTTP используя стандартные методы: GET, POST, PUT (PATCH), DELETE. Они позволяют получить и управлять данными сервиса. Использование веб сервисов требует наличия HTTP клиента, таким образом вам необходим модуль `PhpBrowser` или один из настроенных модулей доступных фреймворков. К примеру мы можем использовать модуль Symfony2 для Symfony2 приложений с целью игнорирования веб сервера и тестирования веб сервиса изнутри.
 
-Configure modules in `api.suite.yml`:
+Конфигурация модулей в `api.suite.yml`:
 
 ``` yaml
 class_name: ApiGuy
@@ -28,15 +29,15 @@ modules:
 		    url: http://serviceapp/api/v1/
 ```
 
-The REST module will automatically connect to PhpBrowser. In case you provide it with Symfony2, Zend, or other framework module, it will connect to them as well. Don't forget to run the `build` command once you finished editing configuration.
+Модуль REST автоматически подключится к PhpBrowser. В случае исползования Symfony2, Zend, или модулей других фреймворков, он будет подключаться к ним. Не забудьте выполнить команду `build` после того, как закончите редактировать конфигурацию.
 
-Let's create the first sample test:
+Создадим первый простой тест:
 
 ```
 php codecept.phar generate:cept api CreateUser
 ```
 
-It will be called `CreateUserCept.php`. We can use it to test creation of user via web service.
+Назовем его `CreateUserCept.php`. Будем использовать его для создания пользователя используя веб сервис.
 
 ``` php
 <?php
@@ -51,9 +52,9 @@ $I->seeResponseContains('{ result: ok}');
 ?>
 ```
 
-REST module is designed to be used with services that serve responses in JSON format. For example, method `seeResponseContainsJson` will convert provided array to json and check if response contains it.
+Модуль REST разработан для использования с сервисами оперирующими данными в JSON формате. К примеру метод `seeResponseContainsJson` конвертирует указанный массив в json и проверит его наличие в ответе от сервиса.
 
-You may want to perform more complex assertions of response. This can be done with writing your own methods in [Helper](http://codeception.com/docs/03-Modules#helpers) classes. To access the latest JSON response you will need to get `response` property of REST module. Let's demonstrate it with `seeResponseIsHtml` method:
+Возможно вам захочется использовать более сложные утверждения `assertions` для проверки ответов. Это может быть реализовано с помощью написания собственных методов в клаccах [Helper](http://codeception.com/docs/03-Modules#helpers). Для доступа к последнему JSON ответу вам необходимо получить свойство `response` модуля REST. Продемонстрируем это на примере метода `seeResponseIsHtml`:
 
 ``` php
 <?php
@@ -68,13 +69,13 @@ class ApiHelper extends \Codeception\Module {
 ?>
 ```
 
-The same way you can receive request parameters and headers.
+Точно так же вы можете передавать параметры запроса и заголовки.
 
 ## SOAP
 
-SOAP web services are often more complex. You will need PHP [configured with SOAP support](http://php.net/manual/en/soap.installation.php). Good knowledge of XML is required too. SOAP module uses specially formatted POST request to connect to WSDL web services. Codeception uses PhpBrowser of one of framework modules to perform this interaction. If you choose using one of framework modules, SOAP module will automatically connect to the framework, and you can improve speed of test execution and get more detailed stack traces in output.
+Веб сервисы SOAP являются более сложным случаем. Вам необходим PHP [собранный с поддержкой SOAP](http://php.net/manual/en/soap.installation.php). Кроме того необходимо хорошее знание XML. SOAP модуль использует специально форматированный POST запрос для подключения к WSDL веб сервисам. Codeception использует PhpBrowser или один из модулей фреймворков для реализации данного взаимодействия. Если вы решите использовать один из модулей фреймворков, модуль SOAP будет автоматически подключен к фреймворку, и вы сможете увеличить скорость выполнения тестов а так же получить более детализированную трассировку и вывод.
 
-Let's configure SOAP module to be used with PhpBrowser:
+Сконфигурируем модуль SOAP для использования с PhpBrowser:
 
 ``` yaml
 
@@ -88,14 +89,14 @@ modules:
 		    endpoint: http://serviceapp/api/v1/
 ```
 
-SOAP request may contain application specific information, like authentication or payment. This information is provided with SOAP header inside the `<soap:Header>` element of XML request. In case you need to submit such header you can use `haveSoapHeader` action. For example, next line of code
+Запрос SOAP может содержать специфическую для приложения информацию, к примеру информацию об аутерификации или об оплате. Эта информация обеспечивается SOAP заголовком внутри элемента `<soap:Header>` XML запроса. В случае, если вам нужно сгенерировать такой заголовок, вы можете использовать действие `haveSoapHeader`. К примеру, следующая строка кода
 
 ``` php
 <?php
 $I->haveSoapHeader('Auth', array('username' => 'Miles', 'password' => '123456'));
 ?>
 ```
-will produce this XML header
+сгенерирует данный XML заголовок
 
 ``` xml
 <soap:Header>
@@ -106,7 +107,7 @@ will produce this XML header
 </soap:Header>
 ```
 
-Use `sendSoapRequest` method to define the body of your request.
+Используйте метод `sendSoapRequest` для определения тела вашего запроса.
 
 ``` php
 <?php
@@ -114,7 +115,7 @@ $I->sendSoapRequest('CreateUser', '<name>Miles Davis</name><email>miles@davis.co
 ?>
 ```
 
-This call will be translated to XML:
+Этот вызов будет конвертирован в следующий XML код:
 
 ``` xml
 <soap:Body>
@@ -125,7 +126,7 @@ This call will be translated to XML:
 </soap:Body>
 ```
 
-And here is the list of sample assertions that can be used with SOAP.
+А вот список простых утверждений которые могут быть использованы с SOAP.
 
 ``` php
 <?php
@@ -136,8 +137,8 @@ $I->seeSoapResponseContainsXPath('//result/user/name[@id=1]');
 ?>
 ```
 
-In case you don't want to write long XML strings, consider using [XmlBuilder](http://codeception.com/docs/reference/xmlbuilder) class. It will help you to build complex XMLs in jQuery-like style.
-In next example we will use `XmlBuilder` (created from SoapUtils factory) instead of regular XMLs.
+В случае, если вы не хотите использовать блинные XML строки, подумайте об использовании [XmlBuilder](http://codeception.com/docs/reference/xmlbuilder) класса. Он поможет вам создавать сложные XML записи в стиле jQuery.
+В следующем примере покажем использование `XmlBuilder` (созданного с помощью фабрики SoapUtils) вместо использования XML.
 
 ``` php
 <?php
@@ -153,9 +154,9 @@ $I->seeSoapResponseIncludes(Soap::response()
 );
 ?>
 ```
-It's up to you to decide weather to use XmlBuilder or string XMLs. XmlBuilder will return XML string as well.
+Решение о том, что использовать, XmlBuilder или XML строки остается за вами. XmlBuilder возвращает XML строки, как вы можете видеть.
 
-You may extend current functionality by using SOAP module in your helper class. To access the SOAP response as `\DOMDocument` you can use `response` property of SOAP module.
+ВЫ можете расширить существующую функциональность при помощи использования модуля SOAP в вашем классе помощнике. Для доступа к такому SOAP ответу как `\DOMDocument` вы можете использовать свойство `response` модуля SOAP.
 
 ``` php
 <?php
@@ -170,6 +171,6 @@ class ApiHelper extends \Codeception\Module {
 ?>
 ```
 
-## Conclusion
+## Заключение
 
-Codeception has two modules that will help you to test various web services. They need a new `api` suite to be created. Remember, you are not limited to test only response body. By including Db module you may check if a user was created after the `CreateUser` call. You can improve testing scenarios by using REST or SOAP responses in your helper methods.
+Codeception имеет два модуля позволяющих тестировать большинство веб сервисов. Для тестирования, необходимо создать новый набор тестов `api`. Помните, что вы не ограничены в том, чтобы тестировать только тело ответа. Например включив модуль Db вы можете проверить, был ли создан пользователь после вызова `CreateUser`. Вы можете улучшить тестовые сценарии используя REST или SOAP ответы в своих методах помощников.
