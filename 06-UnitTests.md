@@ -117,6 +117,7 @@ Codeception позволяет получить доступ к свойства
  * @var Symfony\Component\DependencyInjection\Container
  */
 $container = $this->getModule('Symfony2')->container;
+?>
 ```
 
 Все публичные свойства модулей описаны в соответствующих разделах справки.
@@ -141,20 +142,18 @@ $container = $this->getModule('Symfony2')->container;
 ```php
 <?php
 use Codeception\Util\Stub;
-
 class ExampleTest extends \Codeception\TestCase\Test
 {
-   /**
-    * @var CodeGuy
-    */
     protected $codeGuy;
 
-    function _before()
+    public function _before()
     {
+
         $this->user = new User();
+
     }
 
-    function testUserCanBeBanned()
+    public function testUserCanBeBanned()
     {
     	$this->user->setIsBanned(true);
     	$this->user->setUpdatedBy(Stub::make('User', array('name' => 'admin')));

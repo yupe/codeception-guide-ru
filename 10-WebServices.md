@@ -56,7 +56,7 @@ $I->seeResponseContains('{ result: ok}');
 
 Возможно вам захочется использовать более сложные утверждения `assertions` для проверки ответов. Это может быть реализовано с помощью написания собственных методов в клаccах [Helper](http://codeception.com/docs/03-Modules#helpers). Для доступа к последнему JSON ответу вам необходимо получить свойство `response` модуля REST. Продемонстрируем это на примере метода `seeResponseIsHtml`:
 
-``` php
+```php
 <?php
 class ApiHelper extends \Codeception\Module {
 
@@ -140,10 +140,9 @@ $I->seeSoapResponseContainsXPath('//result/user/name[@id=1]');
 В случае, если вы не хотите использовать блинные XML строки, подумайте об использовании [XmlBuilder](http://codeception.com/docs/reference/xmlbuilder) класса. Он поможет вам создавать сложные XML записи в стиле jQuery.
 В следующем примере покажем использование `XmlBuilder` (созданного с помощью фабрики SoapUtils) вместо использования XML.
 
-``` php
+```php
 <?php
 use \Codeception\Utils\Soap;
-
 $I = new ApiGuy($scenario);
 $I->wantTo('create user');
 $I->haveSoapHeader('Session', array('token' => '123456'));
@@ -158,10 +157,10 @@ $I->seeSoapResponseIncludes(Soap::response()
 
 ВЫ можете расширить существующую функциональность при помощи использования модуля SOAP в вашем классе помощнике. Для доступа к такому SOAP ответу как `\DOMDocument` вы можете использовать свойство `response` модуля SOAP.
 
-``` php
+```php
 <?php
-class ApiHelper extends \Codeception\Module {
-
+class ApiHelper extends \Codeception\Module
+{
 	public function seeResponseIsValidOnSchema($schema)
 	{
 		$response = $this->getModule('SOAP')->response;

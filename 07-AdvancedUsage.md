@@ -24,21 +24,16 @@ php codecept.phar console suitename
 Если у вас есть несколько проектов содержащих Coeception тесты, вы можете использовать один `codecept.phar` файл для их запуска. Чтобы запустить Codeception из другой директории, вы можете добавить опцию `-c` к любой Codeception команде кроме `bootstrap`.
 
 ```
-
 php codecept.phar run -c ~/projects/ecommerce/
 php codecept.phar run -c ~/projects/drupal/
 php codecept.phar generate:cept acceptance CreateArticle -c ~/projects/drupal/
-
 ```
 
 Для создания проекта в директории отличной от той, где вы находитесь, просто добавьте ее путь как параметр.
 
 
 ```
-
 php codecept.phar bootstrap ~/projects/drupal/
-
-
 ```
 
 В сущности опция `-c` позволяет указать не только путь, но и файл конфигурации. Таким образом у вас может быть несколько различных файлов `codeception.yml` в одном тестовом наборе. Вы можете использовать их для указания разных переменных окружения и настроек. Просто передайте имя конфигурационного файла в параметре `-c` для того, чтобы выполнить тесты с настройками указанными в данном конфигурационном файле.
@@ -48,23 +43,18 @@ php codecept.phar bootstrap ~/projects/drupal/
 Есть несколько путей позволяющих выполнить группу тестов. Вы можете выполнить тесты в определенной директории:
 
 ```
-
 php codecept.phar run tests/acceptance/admin
-
-
 ```
 
 Или выполнить одну (или несколько) групп тестов:
 
 ```
-
 php codecept.phar run -g admin -g editor
-
 ```
 
 В данном случае, будут выполнены все тесты принадлежащие группам admin или editor. Концепция групп взята из PHPUnit и его классических тестов которые ведут себя подобным образом. Чтобы добавить Cept тест к группе, используйте переменную `$scenario`:
 
-``` php
+```php
 <?php
 $scenario->group('admin');
 $scenario->group('editor');
@@ -79,7 +69,7 @@ $I->wantToTest('admin area');
 ```
 Для классических тестов и Cests тестов, чтобы добавить тест к группе можно использовать аннотацию `@group`.
 
-``` php
+```php
 <?php
 /**
  * @group admin
@@ -129,7 +119,7 @@ class BasicCest
 
 Как вы могли видеть выше мы передаем класс Guy в метод `tryToTest`. Это позволяет писать сценарии тестирования точно так же, как мы делали это ранее.
 
-``` php
+```php
 <?php
 class BasicCest
 {
@@ -163,7 +153,7 @@ class BasicCest
 
 Вполне очевидно, что вы можете использовать собственные классы для определения похожих методов. 
 
-``` php
+```php
 <?php class TestCommons 
 {
     public static $username = 'jon';
@@ -182,7 +172,7 @@ class BasicCest
 
 Этот файл затем может быть включен в файл `_bootstrap.php`
 
-``` php
+```php
 <?php
 // bootstrap
 require_once '/path/to/test/commons/TestCommons.php';
@@ -191,7 +181,7 @@ require_once '/path/to/test/commons/TestCommons.php';
 
 и затем может быть использован в ваших сценариях:
 
-``` php
+```php
 <?php
 $I = new WebGuy($scenario);
 TestCommons::logMeIn($I);

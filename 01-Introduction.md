@@ -20,8 +20,7 @@ Codeception - фреймворк для тестирования разделя�
 **Пожалуйста, запомните! Абсолютно любой проект может быть покрыт приемочными тестами, даже если Вы используете очень специфичную CMS и/или фреймворк**
 
 #### простой приемочный тест
-~~~
-[php]
+```php
 <?php
 $I = new WebGuy($scenario);
 $I->amOnPage('/');
@@ -29,7 +28,7 @@ $I->click('Sign Up');
 $I->submitForm('#signup', array('username' => 'MilesDavis', 'email' => 'miles@davis.com'));
 $I->see('Thank you for Signing Up!');
 ?>
-~~~
+```
 
 #### Достоинства
 
@@ -56,8 +55,7 @@ Codeception имеет модули для многих популярных ф�
 
 #### простой функциональный тест
 
-~~~
-[php]
+```php
 <?php
 $I = new TestGuy($scenario);
 $I->amOnPage('/');
@@ -67,7 +65,7 @@ $I->see('Thank you for Signing Up!');
 $I->seeEmailSent('miles@davis.com', 'Thank you for registration');
 $I->seeInDatabase('users', array('email' => 'miles@davis.com'));
 ?>
-~~~
+```
 
 #### Достоинства
 
@@ -95,12 +93,8 @@ Codeception основан на [PHPUnit](http://www.phpunit.de/). Если у �
 
 #### простой интеграционный тест
 
-~~~
-[php]
+```php
 <?php
-// we are testing the public method of User class.
-// It requires the user_id and array of parameters.
-
 $I = new CodeGuy($scenario);
 $I->testMethod('User.update');
 $I->haveStubClass($unit = Stub::make('User'));
@@ -109,7 +103,7 @@ $I->executeTestedMethodOn($unit, 1, array('username' => 'miles'));
 $I->seeMethodInvoked($unit, 'save');
 $I->seeInDatabase('users', array('id' => 1, 'username' => 'miles'));
 ?>
-~~~
+```
 
 #### Достоинства
 

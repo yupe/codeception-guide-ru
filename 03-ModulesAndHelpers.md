@@ -7,9 +7,8 @@ Codeception использует модульную архитектуру чт�
 
 Давайте посмотрим на этот тест.
 
-``` php
+```php
 <?php
-
 $I = new TestGuy($scenario);
 $I->amOnPage('/');
 $I->see('Hello');
@@ -45,13 +44,14 @@ Codeception не ограничивает вас в использовании �
 
 Скажем, мы собираемся расширить класс `TestHelper`. По умолчанию он связан с классом `TestGuy` и набором функциональных тестов.
 
-``` php
+```php
 <?php
+
 namespace Codeception\Module;
 // здесь вы можете объявить свои собственные функции для TestGuy
-
 class TestHelper extends \Codeception\Module
 {
+
 }
 ?>
 ```
@@ -63,9 +63,11 @@ class TestHelper extends \Codeception\Module
 Называйте ваши утверждения подобным образом:
 
 ```php
+<?php
 seePageReloaded();
 seeClassIsLoaded($classname);
 dontSeeUserExist($user);
+?>
 ```
 И затем используйте их в своих тестах:
 
@@ -83,9 +85,8 @@ $I->dontSeeUserExist($user);
 Вы можете объявлять утверждения используя `asertXXX` методы модуля.
 Codeception использует утверждения из PHPUnit. Таким образом, в случае когда вам не хватает некоторых утверждений, вы можете использовать статичные методы PHPUnit из класса `PHPUnit_Framework_Assert`.
 
-``` php
+```php
 <?php
-
 function seeClassExist($class)
 {
     $this->assertTrue(class_exists($class));
@@ -97,9 +98,8 @@ function seeClassExist($class)
 
 В ваших помощниках вы можете использовать эти утверждения:
 
-``` php
+```php
 <?php
-
 function seeCanCheckEverything($thing)
 {
     $this->assertTrue(isset($thing), "this thing is set");
@@ -108,7 +108,6 @@ function seeCanCheckEverything($thing)
     $this->assertContains("world", $thing, "this thing contains 'world'");
     $this->assertNotContains("bye", $thing, "this thing doesn`t contain 'bye'");
     $this->assertEquals("hello world", $thing, "this thing is 'Hello world'!");
-    // ...
 }
 ?>
 ```
@@ -119,7 +118,6 @@ function seeCanCheckEverything($thing)
 
 ```php
 <?php
-
 $this->assert(array('Equals',$int,3));
 $this->assertNot(array('internalType',$int,'bool'));
 $this->assert(array('Contains', array(3,5,9), 3));
@@ -127,9 +125,10 @@ $this->assert(array('Contains', array(3,5,9), 3));
 ```
 Давайте посмотрим как определить оба `see` и `dontSee` действия  без дублирования кода.
 
-```php
-<?php
 
+```php
+
+<?php
 public function seeClassExist($class)
 {
     $this->assert($this->proceedSeeClassExist($class));
@@ -165,7 +164,6 @@ Codeception позволяет вам переопределять действ�
 
 ```php
 <?php
-
 function reconnectToDatabase() {
     $dbh = $this->getModule('Db')->dbh;
     $dbh->close();
@@ -196,7 +194,7 @@ function seeConfigFilesCreated()
 
 Таким образом, вы можете доверить написание тестов технически не подкованным людям или специалистам по качеству. В случае если им будет недоставать некоторых действий они объявят их в тесте.
 
-``` php
+```php
 <?php
 $I->doManyCoolThings();
 ?>
@@ -213,9 +211,10 @@ $I->doManyCoolThings();
 
 Все хуки определены в `\Codeception\Module` и перечислены здесь. Вы вольны переопределить их в своем модуле.
 
-```php
-<?php
 
+```php
+
+<?php
     // ХУК: используется после загрузки настроек
     public function _initialize() {
     }
@@ -296,6 +295,7 @@ class Selenium extends \Codeception\Util\MinkJS
 {
     protected $requiredFields = array('browser', 'url');    
     protected $config = array('host' => '127.0.0.1', 'port' => '4444');
+}
 ?>    
 ```
 
@@ -324,7 +324,7 @@ modules:
 Если вы хотите переопределить настройки модуля во время исполнения, вы можете использовать `_reconfigure` метод модуля.
 Вы можете вызвать его из класса помощника и передать в него все поля, которые хотите изменить.
 
-``` php
+```php
 <?php
 $this->getModule('Selenium2')->_reconfigure(array('browser' => 'chrome'));
 ?>
