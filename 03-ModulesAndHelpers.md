@@ -215,33 +215,35 @@ $I->doManyCoolThings();
 ```php
 
 <?php
-    // ХУК: используется после загрузки настроек
-    public function _initialize() {
-    }
 
-	// Хук: при каждой инициализация класса ”Парня”
-	public function _cleanup() {
-	}
+// ХУК: используется после загрузки настроек
+public function _initialize() {
+}
 
-	// ХУК: перед каждым шагом
-	public function _beforeStep(\Codeception\Step $step) {
-	}
+// Хук: при каждой инициализация класса ”Парня”
+public function _cleanup() {
+}
 
-	// Хук: после каждого шага
-	public function _afterStep(\Codeception\Step $step) {
-	}
+// ХУК: перед каждым шагом
+public function _beforeStep(\Codeception\Step $step) {
+}
 
-	// Хук: перед началом теста
-	public function _before(\Codeception\TestCase $test) {
-	}
+// Хук: после каждого шага
+public function _afterStep(\Codeception\Step $step) {
+}
 
-	//Хук: после завершения теста
-	public function _after(\Codeception\TestCase $test) {
-	}
+// Хук: перед началом теста
+public function _before(\Codeception\TestCase $test) {
+}
 
-	//Хук: при провале теста
-	public function _failed(\Codeception\TestCase $test, $fail) {
-	}
+//Хук: после завершения теста
+public function _after(\Codeception\TestCase $test) {
+}
+
+//Хук: при провале теста
+public function _failed(\Codeception\TestCase $test, $fail) {
+}
+
 ?>
 ```
 
