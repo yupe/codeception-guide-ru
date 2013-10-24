@@ -1,29 +1,27 @@
-## Code Coverage
+## Покрытие кода тестами (Code Coverage)
 
-At some point you want to review which parts of your application are tested well and which are not.
-Just for this case the [CodeCoverage](http://en.wikipedia.org/wiki/Code_coverage) is used. When you execute your tests to collect coverage report,
-you will receive statistics of all classes, methods, and lines triggered by these tests.
-The ratio between all lines in script and all touched lines is a main coverage criteria. In the ideal world you should get a 100% code coverage,
-but in reality 80% are just enough. And even 100% code coverage rate doesn't save you from fatal errors and crashes.
+В какой то момент вам захочется узнать, какие части приложения покрыты тестами, а какие нет.
+Именно для этого и используется [CodeCoverage](http://en.wikipedia.org/wiki/Code_coverage). Во время выполнения тестов для сбора данных о покрытии, вы получите статистику по всем классам, методам и строкам кода, которые затронуты вашими тестами.
+Разница между количеством строк кода и количеством затронутых при тестировании строк является главнум критерием покрытия кода тестами. В идеальном мире покрытие кода должно составлять 100%, однако в реальности достаточно и 80%. Однако, даже 100% покрытие кода не защитит вас от ошибок и падения приложения.
 
-**Codeception has CodeCoverage tools since 1.5. To collect coverage information `xdebug` is required**.
+**Codeception включает инструменты CodeCoverage начиная с версии 1.5. Для сбора информации о покрытии тестами необходим `xdebug`**.
 
-![Code Coverage Example](http://codeception.com/images/coverage.png)
+![Пример покрытия тестами](http://codeception.com/images/coverage.png)
 
-Coverage data can be collected manually for local tests and remote tests. Remote tests may be executed on different node,
-or locally, but behind the web server. It may look hard to collect code coverage for Selenium tests or PhpBrowser tests. But Codeception
-supports remote codecoverage as well as local.
+Данные о покрытии тестами могут быть собраны вручную для локальных или удаленных тестов. Удаленные тесты могут выполнятся на другом узле,
+или локально, однако с использованием веб сервера. Может показаться сложным получение покрытия кода для тестов Selenium или PhpBrowser. Однако Codeception
+поддерживает удаленное покрытие точно так же как и локальное.
 
-### Configuration
+### Конфигурация
 
-To enable codecoverge put these lines to the global configuration file `codeception.yml`:
+Чтобы включить утилиту покрытия тестами, добавьте следущие строки в глобальный конфигурационный файл `codeception.yml`:
 
 ``` yaml
 coverage:
     enabled: true
 ```
 
-that's ok for now. But what files should be present in final coverage report? You can filter files by providing blacklist and whitelist filters.
+выглядит неплохо. Но какие файлы должны попасть в отчет о покрытии? Вы можете фильтровать файлы используя black-листы и white-листы.
 
 ``` yaml
 coverage:
@@ -40,15 +38,15 @@ coverage:
             - app/cache/CacheProvider.php
 
 ```
-What are whitelists and blacklists?
+Что такое black-листы и white-листы?
 
-* A **whitelist** is a list of files that should be included in report even they were not touched.
-* A **blacklist** is a list of files that should be excluded from report even they were touched.
+* Список **whitelist** это список файлов которые должны быть включены в отчет, даже если они не затронуты.
+* Список **blacklist** это список файлов которые должны быть исключены из отчета, даже если они затронуты.
 
-Pass an array of files or directory to include/exclude sections. The path ending with '*' matches the directory.
-Also you can use '*' mask in a file name, i.e. `app/models/*Model.php` to match all models.
+Передайте массив файлов/директорий в секции include/exclude. Путь заканчивающийся на '*' отностися к директории.
+Так же вы можете использовать маску '*' в именах файлов, например `app/models/*Model.php` для указания всех моделей.
 
-There is a shortcut if you don't need that complex filters:
+Вот пример, если вам не нужны сложные фильтры:
 
 ``` yaml
 coverage:
@@ -59,48 +57,48 @@ coverage:
         - app/cache/*
 ```
 
-These `include` and `exclude` options are to add or remove files from a whitelist.
+Опции `include` и `exclude` здесь добавляют или удаляют файлы из white-листа.
 
-All these settings can be redefined for each suite in their config files.
+Каждая из этих настроек может быть переопределена для каждого набора в сооветсвующих конфигурационых файлах.
 
-## Local CodeCoverage
+## Локальное покрытие тестами
 
-The basic codecoverage can be collected for functional and unit tests.
-If you performed configurations steps from above you are ready to go.
-All you need is to execute codeception with `--coverage` option.
-To generate a clover xml report or a tasty html report append also `--xml` and `--html` options.
+Базовый отчет о покрытии может быть получен для функциональных и модульных тестов.
+Если вы настроили конфигурацию как было показано выше, вы готовы к дейтсвиям.
+Все что вам нужно выполнить codeception с опцией `--coverage`.
+Для генерации xml отчета или красивого html отчета добавьте опции `--xml` и `--html`.
 
 ``` yaml
 codecept run --coverage --xml --html
 ```
 
-XML and HTML reports are stored to the `_logs` directory. The best way to review report is to open `index.html` from `tests/_logs/coverage` in your browser.
-XML clover reports are used by IDEs (like PHPStorm) or Continuous Integration servers (Like Jenkins).
+XML и HTML отчеты распологаются в директории `_logs`. Лучший способ посмотреть отчет, открыть `index.html` находящийся в директории `tests/_logs/coverage` с помощью вашего браузера.
+XML отчеты используются в IDEs (такими как PHPStorm) или серверами Continuous Integration (Такими как Jenkins).
 
-## Remote CodeCoverage
+## Удаленное покрытие тестами
 
-If you run your application via Webserver (Apache, Nginx, PHP WebServer) you don't have a direct access to tested code,
-so collecting coverage becomes a non-trivial task. The same goes to scripts that are tested on different node.
-To get access to this code you need `xdebug` installed with `remote_enable` option turned on.
-Codeception also requires a little spy to interact  with your application. As your application run standalone,
-without even knowing it is being tested, a small file should be included in order to collect coverage info.
+В случае, есои ваше приложение запущено с помощью веб-сервера (Apache, Nginx, PHP WebServer) у вас нет доступа к тестируемому коду, 
+таким образом сбор данных о покрытии кода становится нетривиальной задачей. То же самое каается скриптов запущенных на другом узле.
+Для того чтобы получить доступ к коду, у вас должно быть установлено расширение `xdebug` с включенной опцией `remote_enable`.
+Codeception так же требует наличия небольшого "шпиона" для взаимодействия с вашим приложением.
+Даже если ваше приложение работает автономно, даже не зная что оно было протестировано, данный файл должен быть подключен для того чтобы стало возможным собирать информауию о покрытии тестами.
 
-This file is called `c3.php` and is [available on GitHub](https://github.com/Codeception/c3).
-`c3.php` should be downloaded and included in your application in a very first line of it's from controller.
-By sending special headers Codeception will command your application when to start codecoverage collection and when to stop it.
-After the suite is finished, a report will be stored and Codeception will grab it from your application.
+Этот файл называется `c3.php` и он [доступен на GitHub](https://github.com/Codeception/c3).
+`c3.php` должен быть скачан и включен в ваше приложение в первой строке of it's from controller.
+Посылая специальные заголовки Codeception будет отдавать команды вашему приложению, позволяющие запускасть сбор данных о покрытии кода и останавилвать его.
+После выполнения набора тестов, отчет будет сохранен и Codeception считает его с вашего приложения.
 
-Please, follow installation instructions described in a [readme file](https://github.com/Codeception/c3).
+Следуйте инструкциям по установке описанным в файле [readme](https://github.com/Codeception/c3).
 
-After the `c3.php` file is included in application you can start gather coverage.
-In case you execute your application locally there is nothing to be changed in config.
-All codecoverage reports will be collected as usual and merged afterwards.
-Think of it: Codeception runs remote coverage in the same way as local.
+После того как файл `c3.php` будет включен в ваше приложение, вы сможете начать сбор данных о покрытии кода тестами.
+В случае, если вы запускаете приложение локально, не нужно производить ни каких дополнитльных действий в конфигурации.
+Все данные будут собраны, после чего скомпонованы.
+Подумайте над этим: Codeception запускает удаленно утилиту сбора покрытия кода тестами, точно так же как и локально.
 
-It's never been easier to setup remote codecoverage for your application. In ay other framework. Really.
+Ни когда настройка удаленного формирования отчета о покрытии кода тестами не была такой простой. В любом другом фреймворке. Серьезно.
 
-But if you run tests on different server (or your webserver doesn't use code from current directory) a single option `remote` should be added to config.
-For example, let's turn on remote coverage for acceptance suite in `acceptance.suite.yml`
+Однако, если вы запускаете тесты на удаленном сервере (или ваш вебсерер не использует код из текущей директории), в конфигурационный файл необходимо добавить опцию `remote`.
+К примеру давайте включим удаленныую утлиту сбора информации о покрытии кода тестами в набор `acceptance.suite.yml`
 
 ``` yaml
 coverage:
@@ -108,12 +106,11 @@ coverage:
     remote: true
 ```
 
-In this case remote Code Coverage results won't be merged with local ones if this option is enabled.
-Merging is possible only in case a remote and local file have th same path.
-But in case of running tests on a remote server we are not sure of it.
+В данном случае результаты отчеты не будут слиты с локальными, если опция включена.
+Объяденение отчетов возможно только в том случае, если файл запущеный удаленно и локально имеет один путь.
+Однако в случае запуска тестов на удаленно сервере нет уверенности, что это так.
 
-## Conclusion
+## Заключение
 
-It's never been easier to setup local and remote code coverage. Just one config and one additional file to include!
-**With Codeception you can easily generate CodeCoverage reports for your Selenium tests** (or other acceptance or api tests). Mixing reports for `acceptance`, `functional`, and `unit` suites provides
-you the most complete information on which parts of your applications are tested and which are not.
+Ни когда ещще не было так просто настроить одновременно локальный и удаленный отчет о покрытии тестами. Всего один конфигурационный файл и один дополнительный файл включенный в приложение!
+**С помощью Codeception вы можете просто создавать CodeCoverage отчеты для ваших Selenium тестов** (или других приемочных и API тестов). Соединяя отчеты для  `acceptance`, `functional`, и `unit` наборов вы можете полчить наиболее полную инфомрацию о том, какие части вашего приложения оттестирвоаны, а какие нет.
