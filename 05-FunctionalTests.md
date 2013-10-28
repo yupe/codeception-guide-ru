@@ -1,13 +1,13 @@
-# Functional Tests
+# Функциональное тестирование
 
-Now that we've written some acceptance tests, functional tests are almost the same, with just one major difference: Functional tests don't require a web server to run your scenarios. In other words, we will run your application inside the tests, emulating requests and response.
+Теперь, когда мы имеем написанные приемочные тсты, настало врмя рассмотреть фнукциональные тесты, функциональные тесты, это почти то же самое что и приемочные, однако есть одно существенное различие: Функциональные тесты не требуют использовния веб сервера для запуска своих сценариев. Другими словами мы будем запускать наше приложение внутри тестов, имитируя запросы и ответы.
 
-In simple terms we set `$_REQUEST`, `$_GET` and `$_POST` variables, then we execute your script inside a test, we receive output, and then we test it. 
-Functional testing may often be better then acceptance testing because it doesn't require a web server and may provide you with more detailed debug output. For example, if your site throws an exception it will be shown in the console.
+Говоря простыми словами, мы устанавливаем переменные `$_REQUEST`, `$_GET` и `$_POST`, затем выполняем скрипт внутри тестаполучаем ответ и тестируем все это.
+Функциональное тестирование часто может быть более лучшим реением чем приемочное потоку как такие тесты не требуют использования веб сервера и могут предложить более подробный отладочный вывод. К примеру, если ваш сайт выбросит исключение, оно будет напечатано в консоли.
 
-Codeception can connect to different web frameworks which support functional testing. For example you can run a functional test for an application built on top of the Zend Framework, Symfony or Symfony2 with just the modules provided by Codeception! The list of supported frameworks will be extended in the future.
+Codeception может подключатся к различным веб фреймворкам поддерживающим функциональное тестирование. К примеру вы можете запустить функциональные тесты для приложения построенного поверх Zend Framework, Symfony или Symfony2 используя лишь модули поставляемые Codeception! Список поддерживаемых модулей будет разобран позже.
 
-Modules for all of these frameworks share the same interface, and thus your tests are not bound to any one of them! This is a sample functional test.
+Модули для всех этих фреймворков имеют одинаковый интерфейс, поэтому ваши тесты не будут связханы друг с другом. Вот простой пример функционального теста.
 
 ``` php
 <?php
@@ -22,57 +22,57 @@ $I->see('Hello, Miles', 'h1');
 ?>
 ```
 
-That was just as acceptance test. As you see you can use same tests for functional and acceptance testing. 
-We recommend writing tests on unstable parts of your application as functional tests, and testing the stable parts with acceptance tests.
+Такой же тест как и приемочный. Как видите можно использовать одинаковые методы и для приемочных и для функциональных тестов.
+Мы рекомендуем тестировать нестабильные части приложения с помощью функциональных тестов, а стабильные с помощью приемочных.
 
-## Pitfalls
+## Ловушки
 
-Acceptance tests are usually much slower than functional tests. But functional tests are less stable, as they run testing framework and application in one environment.
+Приемочные тесты обычно намного медленнее, чем функциональные. Однако функциональные тесты менее стабильны и запускают тестовый фреймворк и приложение в одном окружении.
 
 #### Headers, Cookies, Sessions
 
-One of the common issues problems with functional tests are usage of PHP functions that deal with `headers`, `sessions`, `cookies`.
-As you know, `header` function triggers an error if it is executed more then once. In functional tests we run application multiple times thus, we will get lots of trash errors in the result.
+Одна из исзестных проблем функциональных тестов, использование PHP функций работающих с переменными из категории `headers`, `sessions`, `cookies`.
+Как вы знаете, функция `header` возвратит ошибку, если будет выполнена более одного раза. В функциональных тестах мы запускаем наше приложение несколько раз, таким образом мы получим много ненужных ошибок при отображении результатов.
 
-#### Shared Memory
+#### Разделяемая память
 
-In functional testing unlike the traditional way, PHP application does not stop after it finished processing a request. 
-As all requests run in one memory container they are not isolated.
-So **if you see that your tests are mysteriously failing when they shouldn't - try to execute a single test.**
-This will check if tests were isolated during run. Because it's really easy to spoil environment as all tests are run in shared memory.
-Keep your memory clean, avoid memory leaks and clean global and static variables.
+При функциональном тестировании в отличие от традиционного,  приложение PHP не останавливается после выполнения запроса.
+Так как все запросы выполняются в одном контейнере памяти они не изолированны.
+Таким образом **если вы заметили что ваши тесты магическим образом падают, однако не должны - попробуйте выполнить один тест.**
+Это проверит изолированны ли тесты во время работы. Потому что довольно просто поломать окружение когда все тесты выполняются в разделяемой памяти.
+Держите ваши память в чистоте, избегайте утечек памяти и очищайте глобальные и статические переменные.
 
-## Starting Functional
+## Основы функционального тестирования
 
-You have a functional testing suite in `tests/functional` dir.
-To start you need to include one of the framework's module in suite config file: `tests/functional.suite.yml`.
-Examples on framework configurations you will find below th this chapter.
+Ваши функциональные тесты распологаются в каталоге `tests/functional`.
+Для начала вам необходимо включить один из модулей фреймворков в конфигурационный файл тестового набора: `tests/functional.suite.yml`.
+Примеры конфигурации фреймворков описаны ниже в данной главе.
 
-Then you should rebuild your Guy-classes
+После вам необходимо пересобрать Guy-классы
 
 ```
 php codecept.phar build
 ```
 
-To generate a test you can use standard `generate:cept` command:
+Для генерации теста вы можете использовать стандартную команду генератор `generate:cept`:
 
 ```
 php codecept.phar generate:cept functional myFirstFunctional
 ```
 
-And execute them with `run`:
+После чего выполнить тесты с помощью `run`:
 
 ```
 php codecept.phar run functional
 ```
 
-Use `--debug` option for more detailed output.
+Используйте опцию `--debug` для более детального вывода.
 
-## Error Reporting
+## Сообщения об ошибках
 
-By default Codeception uses `E_ALL & ~E_STRICT & ~E_DEPRECATED` error reporting value. 
-In functional tests you might want to change this values depending on framework's error policy.
-The error reporting value can be set at suite configuraion file:
+По умолчанию Codeception использует значенич `E_ALL & ~E_STRICT & ~E_DEPRECATED`. 
+В функциональных тестах вы можете захотеть сменить эти значения в зависимости от используемого фреймворка.
+Сообщения об ошибках могут быть настроены в конфигурационном файле набора:
 
 {% highlight yaml %}
 class_name: TestGuy
@@ -81,7 +81,7 @@ modules:
 error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"
 {% endhighlight %}
 
-`error_level` can be set globally in `codeception.yml` file.
+`error_level` может быть установлен глобально в файле `codeception.yml`.
 
 ## Frameworks
 
