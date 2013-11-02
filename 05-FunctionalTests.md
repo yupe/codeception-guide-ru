@@ -83,18 +83,18 @@ error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"
 
 `error_level` может быть установлен глобально в файле `codeception.yml`.
 
-## Frameworks
+## Фреймворки
 
-Codeception have integrations for the most popular PHP frameworks.
-We aim to get modules for all of the most popular ones.
-Please help to develop them if you don't see your favorite framework in a list.
+Codeception интегрирован с большинством популярных PHP фреймворков.
+Мы нацелены на то чтобы иметь модули для большинства популярных библиотек.
+Помогите нам в разработке, если вы используете фреймворк, которого нет в списке.
 
 ### Symfony2
 
-To perform Symfony2 integrations you don't need to install any bundles or perform any configuration changes.
-You just need to include the Symfony2 module into your test suite. If you also use Doctrine2, don't forget to include it either.
+Для интеграции Symfony2 вам не нужно устанавливать ни каких бандлов или менять конфигурцаию.
+Просто подключите модуль Symfony2 в ваш тестовый набор. Если вы используете Doctrine2, не забудте подключить его тоже.
 
-Example for `functional.suite.yml`
+Пример для `functional.suite.yml`
 
 ```yaml
 class_name: TestGuy
@@ -102,15 +102,15 @@ modules:
     enabled: [Symfony2, Doctrine2, TestHelper] 
 ```
 
-By default this module wilyl search for Kernel in the `app` directory.
+По умолчнаию модуль будет искать ядро в директории `app`.
 
-The module uses the Symfony Profiler to provide additional information and assertions.
+Модуль использует Symfony Profiler для предоставления дополнительной информации.
 
-[See the full reference](http://codeception.com/docs/modules/Symfony2)
+[Смотрите полную справку](http://codeception.com/docs/modules/Symfony2)
 
 ### Laravel 4
 
-[Laravel](http://codeception.com/docs/modules/Laravel4) module is zero configuration and can be easily set up.
+[Laravel](http://codeception.com/docs/modules/Laravel4) не имеет конфигурации и так же может быть легко настроен.
 
 ```yaml
 class_name: TestGuy
@@ -120,9 +120,9 @@ modules:
 
 ### Yii
 
-By itself Yii framework does not have an engine for functional testing.
-So Codeception is the first and only functional testing framework for Yii.
-To use it with Yii include `Yii1` module into config.
+Сам по себе Yii framework не имеет движка для функционального тестирования.
+Таким образом Codeception первый и единственный фреймворк для функционального тестирования на Yii.
+Для использования его с Yii включите модуль `Yii1` в файл конфигурации.
 
 ```yaml
 class_name: TestGuy
@@ -130,12 +130,12 @@ modules:
     enabled: [Yii1, TestHelper]
 ```
 
-To avoid common pitfalls we discussed earlier, Codeception provides basic hooks over Yii engine.
-Please set them up [following the installation steps in module reference](http://codeception.com/docs/modules/Yii1).
+Для того чтобы избежать подводных камней описаных ранее, Codeception предоставляет некоторые хуки поверх движка Yii.
+Для его установки [следуйте шагам описаным в руководстве](http://codeception.com/docs/modules/Yii1).
 
 ### Zend Framework 2
 
-Use [ZF2](http://codeception.com/docs/modules/ZF2) module to run functional tests inside Zend Framework 2.
+Используйте модуль [ZF2](http://codeception.com/docs/modules/ZF2) для запуска функциональных тестов внутри Zend Framework 2.
 
 ```yaml
 class_name: TestGuy
@@ -145,10 +145,10 @@ modules:
 
 ### Zend Framework 1.x
 
-The module for Zend Framework is highly inspired by ControllerTestCase class, used for functional testing with PHPUnit. 
-It follows similar approaches for bootstrapping and cleaning up. To start using Zend Framework in your functional tests, include the ZF1 module.
+Модуль для Zend Framework значитичтельно заимствует функциональ класса ControllerTestCase, используемого для функциональных тестов с помощью PHPUnit. 
+Он использует похожие подходы для загрузки и очистки. Для использования Zend Framework в ваших функциональных тестах, включите модуль ZF1.
 
-Example for `functional.suite.yml`
+Пример для `functional.suite.yml`
 
 ```yaml
 class_name: TestGuy
@@ -156,14 +156,14 @@ modules:
     enabled: [ZF1, TestHelper] 
 ```
 
-[See the full reference](http://codeception.com/docs/modules/ZF1)
+[Смотрите полную справку](http://codeception.com/docs/modules/ZF1)
 
 ### symfony
 
-This module was the first one developed for Codeception. Because of this, its actions may differ from what are used in another frameworks.
-It provides various useful operations like logging in a user with sfGuardAuth or validating the form inside a test.
+Этот модуль один из первых который был разработан для Codeception. Поэтому его дествия могут отличатся от действий используемых в других фреймворках.
+Он предоставляет множество удобных операций, таких как логирование с помощью sfGuardAuth или валидация внутри теста.
 
-Example for `functional.suite.yml`
+Пример для `functional.suite.yml`
 
 ```yaml
 class_name: TestGuy
@@ -171,28 +171,28 @@ modules:
     enabled: [Symfony1, TestHelper] 
 ```
 
-[See the full reference](http://codeception.com/docs/modules/Symfony1)
+[Смотрите полную справку](http://codeception.com/docs/modules/Symfony1)
 
-## Integrating Other Frameworks
+## Интеграция с другими фреймворками
 
-Codeception doesn't provide any generic functional testing module because there are a lot of details we can't implement in general.
-We already discussed the common pitfalls for functional testing. And there is no one single recipe how to solve them for all PHP applications.
-So if you don't use any of the frameworks listed above, you might want to integrate your framework into Codeception. That task requires some knowledge of Codeception internals and some time. Probably, you are ok with just acceptance tests, but any help in extending Codeception functionality will be appreciated. We will review what should be done to have your framework integrated.
+Codeception не предоставляет базового модуля для функционального тестирования потому, что есть множество деталей которые невозможно реализовать в таком варианте.
+Мы уже обсудили распространенные подводные камни функционального тестирования. И не существует единого способа решить все эти проблемы для всех PHP приложений.
+Так что, если вы не используете не один из фреймворков представленных выше, вы можете захотеть интегрировать фреймворк который используете в Codeception. Эта задача требует некоторого знания внутренностей Codeception и некоторого времени. Вероятно вам хватит использования только приемочных тестов, но любая помощь в расширении функциональности Codecaption будет оценена. Мы посмотрим что должно быть сделано для интеграции вашего фреймворка.
 
-#### With HttpKernel
+#### Использующеие HttpKernel
 
-If you have a framework that uses Symfony's `HttpKernel`, using it with Codeception will be like a piece of cake.
-You will need to create a module for it and test it on your application.
-We already have a [guide for such integration](http://codeception.com/01-24-2013/connecting-php-frameworks-1.html).
-Develop a module, try it and share with community.
+Если у вас есть фреймворк который исползует Symfony's `HttpKernel`, работа с COdeception не составит труда.
+Вам нужно созать модуль для него и использовать его в вашем приложении.
+У нас есть [руководство по интеграции](http://codeception.com/01-24-2013/connecting-php-frameworks-1.html).
+Разработайте модуль, попробуйте и поделитесь с собществом.
 
-#### Any Other
+#### Любые другие
 
-Integration is a bit harder if your framework is not using HttpKernel component.
-The hardest part of it is resolving common pitfalls: memory management, and usage of `headers` function.
-Codeception uses [BrowserKit](https://github.com/symfony/BrowserKit) from the Symfony Components to interact with applications in functional tests. This component provides all of the common actions we see in modules: click, fillField, see, etc... So you don't need to write these methods in your module. For the integration you should provide a bridge from BrowserKit to your application.
+Интеграция становится сложнее, если ваш фреймворк не использует компонент HttpKernel.
+Самая сложная часть - это разрешение типичных проблем: управления памятью, и использования `headers` функций.
+Codeception использует [BrowserKit](https://github.com/symfony/BrowserKit) взятый из компонентов Symfony Components для взаимодействия с приложеними в функциональных тестах. Этот компонент предоставляет все из распространенных дейтствий которые вы могли видеть в модулях: click, fillField, see, и т.д... Таким образом вам не нужно реализовывать данные методы в своем модуле. Для интеграции вы должны реализовать мост между BrowserKit и вашим приложением.
 
-We will start with writing a helper class for framework integration.
+Начнем с написания класса помощника для реализации интеграции
 
 ```php
 <?php
@@ -203,14 +203,14 @@ class SomeFrameworkHelper extends \Codeception\Util\Framework {
 ?>
 ```
 
-Let's investigate [Codeception source code](https://github.com/Codeception/Codeception).
-Look into the `src/Util/Framework.php` file that we extend. It implements all of the common actions for all frameworks.
+Давайте исследуем [Исходный код Codeception](https://github.com/Codeception/Codeception).
+Взгляните в файл `src/Util/Framework.php` который мы расширяем. Он реализует большинство распространенных дейтсвий для всех фреймворков.
 
-You may see that all of the interactions are performed by a 'client' instance. We need to create a client that connects to a framework.
-Client should extend Symfony\BrowserKit\Client module, sample clients are in the `src/Util/Connector` path. 
-If the framework doesn't provide its own tools for functional testing you can try using the Universal connector. Otherwise, look at how the Zend connector is implemented, and implement your own connector.
+Как вы можете видеть все дейтвия предоставляются обектом 'client'. Нам нужно создать client который подключается к фреймворку.
+Client должен расширять модуль Symfony\BrowserKit\Client, примеры клиентов находятся в каталоге `src/Util/Connector`. 
+Если фреймворк не предоставляет собственных компонентов для функционального тестирования вы можете попробовать использовать Universal коннектор. Или же взгляните как реализован Zend connector, и реализуйте свой собственный.
 
-Whether you decide to use the Universal connector or write your own, you can include it into your module.
+Решите ли вы использовать Universal connector или напишете свой собственный, вы можете включить его в свой модуль.
 
 ```php
 <?php
@@ -228,25 +228,25 @@ class SomeFrameworkHelper extends \Codeception\Util\Framework {
 ?>
 ```
 
-If you include this helper into your suite, it can already perform interactions with your applications.
-You can extend its abilities by connecting to the framework internals. 
-It's important to perform a proper clean up on each test run. 
-This can be done in the _before and _after methods of the helper module. Check that the framework doesn't cache any data or configuration between tests.
+Если вы включите данный помощник в ваш набор, он позволит взаимодействовать с вашими прилоежниями.
+Вы можете расширить его возможности подключив внутренние функции фреймворка.
+Важно выполнять очистку после каждого запуска теста.
+Это может быть реализовано в _before и _after методах модуля помощника. Проверьте, что фреймворк не кеширует ни каких данных или конфигурации во время тестирования.
 
-After you get your module stabilized, share it with the community. Fork a Codeception repository, add your module and make a Pull Request.
+После того как вы сделаете модуль стабильным, поделитесь им с сообществом. Форкнуте репозиторий Codeception, добавьте ваш модуль и сделайте Pull Request.
 
-There are some requirements for modules:
+Вот некоторые требования к модулям:
 
-* It should be easy to configure.
-* It should contain proper documentation.
-* It should extend basic operations by using framework internals.
-* It's preferred that it be able to print additional debug information.
+* Он должен легко конфигурироваться.
+* Он должен иметь хорошую документацию.
+* Он должен расширять базыове опреации используя возможности фреймворка.
+* Желательно чтобы он мог выводить дополнительную отладочную инфомрацию.
 
-We don't require unit tests, because there is no good way for writing proper unit tests for framework integration.
-But you can demonstrate a sample application with your framework which uses Codeception tests and your module. 
+Мы не требем включения модульных тестов т.к. не существует хорошего пути для написания подходящий юнит тестов для интеграции фреймворков.
+Но вы можете продемонстрировать простое приложение использующее ваш фремворк и ваш модуль с Codeception.
 
-## Conclusion
+## Заключение
 
-Functional tests are great if you are using powerful frameworks. By using functional tests you can access and manipulate their internal state. 
-This makes your tests shorter and faster. In other cases, if you don't use frameworks, there is no practical reason to write functional tests.
-If you are using a framework other than the ones listed here, create a module for it and share it with community.
+Функциональные тесты отличная вещь, если вы используете мощный фреймворк. Используя данные тесты вы можете полуать доступ и управлять их внутренним состоянием.
+Это сделает ваши тесты короче и быстрее. В случае, если вы не используете фреймворки, не имеет практического смысоа в написании функциональных тестов.
+Если вы используете фреймворк которого нет в списке, напишите модуль и поделитесь с сообществом.
