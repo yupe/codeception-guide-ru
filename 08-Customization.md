@@ -1,16 +1,16 @@
-# Customization
+# Настройка
 
-In this chapter we will explain how can you extend and customize file structure and test execution routine.
+В данном разделе, мы объясним, как вы можете расширить и настроить структуру файлов тестов, а так же их порядок выполнения.
 
-## One Runner for Multiple Applications
+## Один загрузчик для нескольких приложений
 
-In case your project consist of several applications (frontend, admin, api) or you use Symfony2 framework with its bundles,
-you may be interested in having all tests for all applications (bundles) to be executed in one runner.
-In this case you will get one report that covers the whole project.
+В случае, если проект состоит из нескольких приложений (frontend, admin, api) или вы используете бандлы Symfony2,
+вы можете захотеть, чтобы тесты для всех приложений запускались одним загрузчиком.
+В таком случае вы получите один отчет для всего проекта.
 
-Starting from Codeception 1.6.3 it's now possible to create a meta-config that includes codeception configs from different places.
+Начиная с версии Codeception 1.6.3 появилась возможность создать meta-config, включающий конфигурационные файлы из разных каталогов.
 
-Place `codeception.yml` file into root of your project and specify paths to other `codeception.yml` configs you want to include.
+Поместите `codeception.yml` в корень проекта, и укажите пути к других `codeception.yml` конфигам, которые вы хотите подключить.
 
 ``` yaml
 include:
@@ -23,21 +23,21 @@ settings:
   colors: false
 ```
 
-You should also specify path to `log` directory, where the reports and logs will be stored.
+Кроме того, вам следует указать путь к каталогу `log`, в котором будут храниться отчеты и логи всего проекта.
 
-### Namespaces
+### Пространства имен
 
-To avoid naming conflicts between Guy classes and Helpers classes, they should be added into namespace.
-To create test suites with namespaces you can add `--namespace` option to bootstrap command.
+Для того, чтобы избежать конфликтов имен между Guy и Helper классами, они должны быть добавлены в пространства имен.
+Для создания набора тестов с использованием пространств имен, добавьте опцию `--namespace` к команде bootstrap.
 
 ``` bash
 php codecept.phar bootstrap --namespace frontend
 
 ```
 
-This will bootstrap a new project with `namespace: frontend` parameter in `codeception.yml` file. 
-Helpers will use `frontend\Codeception\Module` namespace and Guy classes will use `frontend` namespace.
-Thus, newly generated tests will have this look:
+Это создаст новый проект с параметром `namespace: frontend` в файле конфигурации `codeception.yml`.
+Помощники будут использовать пространство имен `frontend\Codeception\Module` а классы Guy пространство имен `frontend`.
+Сгенерированные классы будут выглядеть примерно так:
 
 ``` php
 <?php use frontend\WebGuy;
@@ -46,29 +46,30 @@ $I = new WebGuy($scenario);
 ?>
 ```
 
-Codeception have tools to upgrade tests of your current project to use namespaces. By running this command
+Codeception имеет утилиты для того, чтобы обновить тесты существующего проекта, добавив в них использование пространств имен. Этого можно добиться выполнив следующую комманду
 
 ``` bash
 php codecept.phar refactor:add-namespace frontend
 
 ```
 
-You will get your guy classes, helpers and cept tests upgraded to use namespaces. Please, note that Cest files should be upgraded manually. Also `namespace` option does not change the namespace of Test or Cest classes. It is used only for Guys and Helpers.
+Вы получите guy классы и помощники, а так же cept тесы обновленные для использования с пространствами имен. Запомните, что Cest файлы должны быть обновлены вручную. Коме того опция `namespace` не изменит пространство имен тестов или Cest классов. Она используется только для Guys классов или классов Помощников.
 
-Once each your application (bundle) has its own namespace and different helper or guy classes, you can execute all tests in one runner. Use meta-config we created above and run codeception tests as usual.
+В то время, когда каждое приложение (бандл) имеет собственное пространство имен и разные классы помощники и guy классы, вы можете выполнить их с помощью одной команды.
+Используйте meta-config который мы создали выше для запуска тестов как вы делаете это обычно.
 
 ```
 php codecept.phar run
 
 ```
 
-This will launch test suites for all 3 applications and merge the reports from all of them. Basically that would be very useful when you run your tests on conitinous integration server and you want to get one report in JUnit and HTML format. Codecoverage report will be merged too. 
+Это выполнит тесты для всех 3 приложений и сольет отчеты в один. По существу, это может быть довольно удобно, в случае, если вы запускаете тесты на сервере непрерывной интеграции и хотите получить один отчет в формате JUnit или HTML. Отчет о покрытии кода тестами, будет так же объединен в один.
 
-If your application should use the same helpers follow the next section of this chapter.
+Если ваше приложение должно использовать одинаковые классы помощников обратитесь к следующему разделу
 
 ## Autoload Helper classes
 
-In Codeception 1.6.3 a global `_bootstrap.php` file was introduced. By default you can place it into `tests` directory. If file is there it will be included at the very begining of execution routine. We recommend to use it to initialize autoloaders and constants. It is epecially useful if you want to include Modules or Helper classes that are not stored in `tests/_helpers` direactory.
+В Codeception 1.6.3 был анонсирован глобальный файл `_bootstrap.php`. По умолчанию вы можете поместить его в каталог `tests`. Если данный файл существует, он будет подключен в самом начале последовательности запуска тестов. Мы рекомендуем использовать его для инициализации загрузчиков и констант. Он довольно полезен, если вы хотите к примеру подключить классы модулей или помощников, которые хранятся в каталоге отличном от `tests/_helpers`.
 
 ``` php
 <?php
@@ -76,9 +77,8 @@ require_once __DIR__.'/../lib/tests/helpers/MyHelper.php'
 ?>
 ```
 
-Alternatively you can use Composer's autoloader. Codeception has its autoloader too. 
-It's not PSR-0 compatible (yet), but is very useful when you need to declare alternative path for Helper classes:
-
+Как альтернатива, вы можете использовать Composer загрузчик. Codeception имеет так же свой автозагрузчик.
+Пока что он не совместим с PSR-0, однако он довольно полезен, если вам необходимо объявить альтернативный путь к вашим классам помощникам:
 
 ``` php
 <?php
@@ -86,7 +86,7 @@ Codeception\Util\Autoload::registerSuffix('Helper', __DIR__.'/../lib/tests/helpe
 ?>
 ```
 
-Now all classes with suffix `Helper` will be additionally searched in `__DIR__.'/../lib/tests/helpers'. You can declare to load helpers of specific namespace. 
+Теперь все классы с суффиксом `Helper` дополнительно будут искаться в каталоге `__DIR__.'/../lib/tests/helpers'. Вы можете объявить загрузку помощников из определенного пространства имен.
 
 ``` php
 <?php
@@ -94,11 +94,11 @@ Codeception\Util\Autoload::register('MyApp\\Test','Helper', __DIR__.'/../lib/tes
 ?>
 ```
 
-That will point autoloader to look for classes like `MyApp\Test\MyHelper` in path `__DIR__.'/../lib/tests/helpers'`.
+Это укажет загрузчику искать классы типа `MyApp\Test\MyHelper` в каталоге `__DIR__.'/../lib/tests/helpers'`.
 
-Alternatively you can use autoloader to specify path for **PageObject and Controller** classes if they have appropriate suffixes in their name.
+Кроме этого вы можете использовать автощагрузчик для указания пути к классам **PageObject and Controller** если они имеют подходщие суффиксы в своих именах.
 
-Example of `tests/_bootstrap.php` file:
+Пример файла `tests/_bootstrap.php`:
 
 ``` php
 <?php
