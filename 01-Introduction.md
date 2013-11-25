@@ -77,7 +77,7 @@ $I->seeInDatabase('users', array('email' => 'miles@davis.com'));
 #### Недостатки
 
 * невозможно тестировать javascript и ajax-запросы
-* by emulating the browser you might get more false-positive results.
+* эмулируя работу браузера тесты могу приводить к ложно-положительным результатам
 * требуется фреймоврк
 
 ### Модульное тестирование (CodeGuy)
