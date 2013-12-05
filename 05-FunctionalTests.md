@@ -74,12 +74,10 @@ php codecept.phar run functional
 В функциональных тестах вы можете захотеть сменить эти значения в зависимости от используемого фреймворка.
 Сообщения об ошибках могут быть настроены в конфигурационном файле набора:
 
-{% highlight yaml %}
-class_name: TestGuy
-modules:
-    enabled: [Yii1, TestHelper]
-error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"
-{% endhighlight %}
+    class_name: TestGuy  
+    modules:  
+        enabled: [Yii1, TestHelper]  
+    error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"  
 
 `error_level` может быть установлен глобально в файле `codeception.yml`.
 
