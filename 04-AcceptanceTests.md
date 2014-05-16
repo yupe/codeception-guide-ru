@@ -40,13 +40,12 @@ $ php codecept.phar generate:scenarios
 
 Сгенерированные сценарии сохраняются в каталоге "data" основного каталога с тестами
 
-Этот сценарий может быть выполнен как PHP-браузером, так и обычным браузером через Selenium (или Sahi или ZombieJS). Мы начнем написание приемочных тестов с использованием PHP-браузера. Если у вас не было опыта работы с Selenium или Sahi - сервером - PHP-браузер будет хорошим выбором для начала. 
+Этот сценарий может быть выполнен как PHP-браузером, так и обычным браузером через Selenium (или Sahi или ZombieJS). Мы начнем написание приемочных тестов с использованием PHP-браузера. Если у Вас не было опыта работы с Selenium или Sahi - сервером - PHP-браузер будет хорошим выбором для начала. 
 
 ## PHP-браузер
 
-Это наиболее простой и быстрый способ запустить приемочные тесты, так как он не требует фактического запуска браузера. We use a PHP web spider, which acts like a browser: it sends a request, then receives and parses the response. For such a browser Codeception uses [Goutte Web Scrapper](https://github.com/fabpot/Goutte) driven by [Mink](http://mink.behat.org). Unlike common browsers Goutte has no rendering or javascript processing engine, so you can't test actual visibility of elements, or javascript interactions. The good thing about Goutte is that it can be run in any environment, with just PHP required.
-
-Before we start we need a local copy of the site running on your host. We need to specify the url parameter in the acceptance suite config (tests/acceptance.suite.yml).
+Это наиболее простой и быстрый способ запустить приемочные тесты, так как он не требует фактического запуска браузера. Мы используем PHP web-паук, который работает, как браузер: отправляет запрос и обрабатывает полученный ответ. Для такого браузера Codeception использует [Goutte Web Scrapper](https://github.com/fabpot/Goutte), приведенный  [Mink]-ом (http://mink.behat.org). В отличии от известных браузеров, Goutte не имеет рендер/javascript движка, поэтому Вы не можете  проверить реальное отображение элементов, или работу Javascript-а. Хорошая новость в том, что Goutte может быть выполнен в любом окружении.
+   До того, как мы начнем, нам понадобится локальная копия сайта, работающего на Вашем хосте. Мы должны указать url в конфиге приемочного набора тестов  (tests/acceptance.suite.yml).
 
 ``` yaml
 class_name: WebGuy
@@ -60,7 +59,7 @@ modules:
             url: [your site's url]
 ```
 
-We should start by creating a 'Cept' file in the __tests/acceptance__ dir. Let's call it __SigninCept.php__. We will write the first lines into it.
+Следует начать с создания  'Cept' файла в папке __tests/acceptance__ . Давайте назовем его __SigninCept.php__. Мы впишем туда первые строчки.
 
 ``` php
 <?php
@@ -69,13 +68,12 @@ $I->wantTo('sign in with valid account');
 ?>
 ```
 
-The `wantTo` section describes your scenario in brief. There are additional comment methods that are useful to make a Codeception scenario a BDD Story. If you have ever written a BDD scenario in Gherkin, you can translate a classic story into Codeception code.
+Секция `wantTo` вкратце описывает Ваш сценарий. Там расположены дополнительные закомментированные методы, нужные для создания Codeception scenario a BDD Story. Если Вы когда-либо писали BDD сценарий в Gherkin, Вы сможете перевести классическую историю classic в Codeception код.
 
 ``` bash
-As an Account Holder
-I want to withdraw cash from an ATM
-So that I can get money when the bank is closed
-
+Являясь держателем аккаунта
+Я хочу снять деньги с банкомата
+Тогда я смогу получить деньги, когда банк закрыт.
 ```
 
 Becomes:
@@ -91,7 +89,7 @@ $I->lookForwardTo('get money when the bank is closed');
 
 After we have described the story background, let's start writing a scenario. 
 
-The `$I` object is used to write all interactions. The methods of the `$I` object are taken from the `PHPBrowser` and `Db` modules. We will briefly describe them here, but for the full reference look into the modules reference, here on [Codeception.com](http://codeception.com). 
+объект `$I` служит для записи всех взаимодействий. Методы объекта `$I` берутся из модулей `PHPBrowser` и `Db`. Здесь мы кратко опишем процесс, но для полной картины пройдите по ссылке здесь [Codeception.com](http://codeception.com). 
 
 ```php
 <?php
@@ -99,14 +97,14 @@ $I->amOnPage('/login');
 ?>
 ```
 
-We assume that all `am` commands should describe the starting environment. The `amOnPage` command sets the starting point of test on the __/login page__. By default the browser starts on the front page of your local site. 
+Мы подразумеваем, что всё `am` команды  должны описывать стартовое окружение. Команда `amOnPage` устанавливает начальную точку теста на странице __/login page__. По умолчанию, браузер открывает главную страницу Вашего локального сайта. 
 
-With the `PhpBrowser` you can click the links and fill the forms. Probably that will be the majority of your actions.
+С помощью `PhpBrowser` вы можете кликать по ссылкам и заполнять формы. Возможно, это будут Ваши основные действия.
 
-#### Click
+#### Click (Клик)
 
-Emulates a click on valid anchors. The page from the "href" parameter will be opened.
-As a parameter you can specify the link name or a valid CSS selector. Before clicking the link you can perform a check if the link really exists on a page. This can be done by the `seeLink` action.
+Эмулирует клики по валидным якорям. Страница будет открыта исходя из параметра "href".
+В качестве параметра Вы можете указать имя ссылки или валидный CSS селектор. Перед переходом по ссылке, Вы можете проверить, действительно ли ссылка присутствует на странице. Это может быть выполнено с помощью action-а `seeLink`.
 
 ```php
 <?php
@@ -120,12 +118,12 @@ $I->seeLink('#login a','/login');
 ?>
 ```
 
-#### Forms
+#### Forms (Формы)
 
-Clicking the links is not what takes the most time during testing a web site. If your site consists only of links you can skip test automation.
-The most routine waste of time goes into the testing of forms. Codeception provides several ways of doing that.
+Кликанье по ссылкам не является тем, что занимает большую часть времени при тестировании веб-сайта. Если Ваш сайт состоит только из ссылок, Вы можете пропустить автоматизацию тестирования. Наиболее рутинную долю занимает тестирование форм.
+Codeception предоставляет несколько способов сделать это.
 
-Let's submit this sample form inside the Codeception test.
+Давайте засабмитим наш пример формы внутри Codeception теста.
 
 ```html
 <form method="post" action="/update" id="update_form">
@@ -142,7 +140,7 @@ Let's submit this sample form inside the Codeception test.
 </form>
 ```
 
-From a user's perspective, a form consists of fields which should be filled, and then an Update button clicked. 
+С точки зрения пользователя, форма состоит из полей, которые должны быть заполнены, после чего нажата кнопка Update.  
 
 ```php
 <?php
@@ -155,12 +153,11 @@ $I->click('Update');
 ?>
 ```
 
-To match fields by their labels, you should write a `for` attribute in the label tag.
+Чтобы найти поля по их "лэйблам"(labels), Вам следует вписать атрибут `for` в тэг лэйбла.
 
-From the developer's perspective, submitting a form is just sending a valid post request to the server.
-Sometimes it's easier to fill all of the fields at once and send the form without clicking a 'Submit' button.
-Similar scenario can be rewritten with only one command.
-
+С точки же зрения разработчика, сабмит формы - это просто отправка корректногого POST запроса на сервер.
+Иногда проще сразу заполнить все поля и отправить форму без нажатия кнопки 'Submit'.
+Похожий сценарий мождет быть переписан с помощью одной единственной команды.
 ```php
 <?php
 $I->submitForm('#update_form', array('user' => array(
@@ -171,16 +168,16 @@ $I->submitForm('#update_form', array('user' => array(
 ?>
 ```
 
-The `submitForm` is not emulating a user's actions, but it's quite useful in situations when the form is not formatted properly.
-Whether labels aren't set, or fields have unclean names, or badly written ids, or the form is sent by a javascript call, `submitForm` is quite useful. 
-Consider using this action for testing pages with bad html-code.
+`submitForm` - это не эмуляция действий пользователя. Использование этого метода довольно полезно в ситуациях, когда форма некорректно отформатирована.
+Независимо от того, установлены ли метки, имеют ли поля некорретные имена или айди, или форма отправлена с помощью javascript, `submitForm` является будет весьма полезен. 
+Рассмотрите возможность использования этого метода для тестирования страниц с некорректным HTML-кодом.
 
-Also you should note that `submitForm` can't be run in Selenium. 
+Также следует заметить, что метод `submitForm` не может быть выполнен в Selenium. 
 
-#### AJAX Emulation
+#### Эмуляция AJAX
 
-As we know, PHP browser can't process javascript. Still, all the ajax calls can be easily emulated, by sending the proper GET or POST request to the server.
-Consider using these methods for ajax interactions.
+Как мы знаем, PHP браузер не может обрабатывать javascript. Тем не менее, все ajax вызовы могут быть просто сэмулированы с помощью отправки верного GET или POST запроса на сервер.
+Подумайте о возможности использования этих методов для ajax взаимодействия.
 
 ```php
 <?php
@@ -189,10 +186,9 @@ $I->sendAjaxPostRequest('/update',array('name' => 'Miles', 'email' => 'Davis'));
 ?>
 ```
 
-#### Assertions
+#### Ассерты
 
-In the PHP browser you can test the page contents. In most cases you just need to check that the required text or element is on the page.
-The most useful command for this is `see`.
+В PHP браузере вы сможете протестировать содержимое страницы. В большинстве случаев, Вам просто нужно убедиться, что требуемый текст или элемент находятся на странице.
 
 ```php
 <?php
@@ -208,7 +204,8 @@ $I->dontSee('Form is filled incorrectly');
 ?>
 ```
 
-We also have other useful commands to perform checks. Please note that they all start with the `see` prefix.
+Также у нас имеются и другие полезные команды для выполнения проверок.
+Пожалуйста, имейте в виду, что все они начинаются с префикса `see`.
 
 ```php
 <?php
@@ -219,9 +216,9 @@ $I->seeLink('Login');
 ?>
 ```
 
-#### Grabbers
+#### Грабберы
 
-This is are the commands are introduced in Codeception 1.1. They are quite useful when you need to retrieve the data from the test and use it in next steps. Imagine, your site generates a password for every user, and you want to check the user can log in into site using this password.
+Это команды, представленные в Codeception 1.1. Они довольно полезны, когда Вам требуется обработать данные, полученные из теста, и использовать их в следующих шагах. Представьте, Ваш сайт генерирует пароль для каждого пользователя, и Вы хотите убедиться, что он может зайти на сайт, используя этот пароль.
 
 ```php
 <?php
@@ -235,7 +232,7 @@ $I->click('Log in!');
 ?>
 ```
 
-Grabbers allows to get a single value from current page with commands.
+Грабберы позволяют Вам получить одно значение с текущей страницы с помощью команд.
 
 ```php
 <?php
@@ -245,10 +242,11 @@ $api_key = $I->grabValueFrom('input[name=api]');
 ?>
 ```
 
-#### Comments
+#### Комментарии
 
-Within a long scenario you should describe what actions you are going to perform and what results to achieve.
-Commands like amGoingTo, expect, expectTo helps you in making tests more descriptive.
+
+На протяжении всего сценария, Вам нужно описывать, какие действия Вы собираетесь выполнить и каких результатов достигнуть.
+Команды,amGoingTo, expect, expectTo помогают сделать создаваемые Вами тесты более наглядными.
 
 ```php
 <?php
@@ -262,8 +260,8 @@ $I->see('Form is filled incorrectly');
 
 ## Selenium
 
-A nice feature of Codeception is that most scenarios can be easily ported between the testing backends.
-Your PhpBrowser tests we wrote previously can be performed by Selenium. The only thing we need to change is to reconfigure and rebuild the WebGuy class, to use Selenium instead of PhpBrowser.
+Прекрасная возможность Codeception-а состоит в том, что большинство сценариев может быть с легкостью перенесено между тестируемыми бэкэндами(бэкэнд - это код админки, движка, базы данных и т.д., т.е. то, к чему не имеет доступ пользователь/клиент).
+Ваши тесты PhpBrowser-а, о которых мы писали ранее, могут быть выполнены в Selenium. Единственное,что нам нужно сделать - это переконфигурировать и пересобрать класс WebGuy, чтобы использовать Selenium вместо PhpBrowser-а.
 
 ```yaml
 class_name: WebGuy
@@ -277,15 +275,14 @@ modules:
             browser: firefox            
 ```
 
-Remember, running tests with PhpBrowser and Selenium is quite different. There are some actions which do not exist in both modules, like the `submitForm` action we reviewed before. 
-
+Помните, запуск тестов с помощью PhpBrowser и Selenium сильно различается между собой. Существуют методы, отсутствующие в обоих модулях, например, `submitForm`, рассмотренный ранее.
 In order to run Selenium tests you need to [download Selenium Server](http://seleniumhq.org/download/) and get it running. 
+Для того, чтобы запустить Selenium-тесты, Вам нужно [скачать Selenium Server](http://seleniumhq.org/download/) и запустить его.
+Если Вы запускаете приемочные тесты с помощью Selenium-а, Firefox будет запущен и все действия будут выполнены шаг за шагом. Команды, которые мы используем в Selenium-е, сильно похожи на те, что есть в PHPBrowser-е.
+The commands we use for Selenium are mostly like those we have for PHPBrowser. Тем не менее, их поведение может немного отличаться.
+Все действия, совершенные на странице, вызовут javascript события, которые могли бы обновить содержимое страницы. Поэтому метод  `click` - это не просто загрузка страницы по параметру 'href', но также и возможность выполнить ajax запрос, или сделать элемент видимым.
 
-If you run acceptance tests with Selenium, Firefox will be started and all actions will be performed step by step. 
-The commands we use for Selenium are mostly like those we have for PHPBrowser. Nevertheless, their behavior may be slightly different.
-All of the actions performed on a page will trigger javascript events, which might update the page contents. So the `click` action is not just loading the page from the  'href' parameter of an anchor, but also may start the ajax request, or toggle visibility of an element.
-
-By the way, the `see` command with element set, won't just check that the text exists inside the element, but it will also check that this element is actually visible to the user. 
+Кстати, команда `see` command with element set не просто убедится, что текст внутри элемента существует, но также проверит,что элемент действительно виден пользователю. 
 
 ```php
 <?php 
@@ -295,14 +292,16 @@ $I->see('Confirm','#modal');
 ?>
 ```
 
-See the Selenium module documentation for the full reference.
-
+Смотрите документацию по модулю Selenium для полной ясности : ).
 ### Cleaning things up
 
 While testing, your actions may change the data on the site. Tests will fail if trying to create or update the same data twice. To avoid this problem, your database should be repopulated for each test. Codeception provides a `Db` module for that purpose. It will load a database dump after each passed test. To make repopulation work, create an sql dump of your database and put it into the __/tests/data__ dir. Set the database connection and path to the dump in the global Codeception config.
+В процессе тестирования, Ваши действия могут изменить информацию на странице. Тесты обрушатся при попытке создать или обновить одни и те же данные дважды : ). Чтобы избежать этого, Ваша БД должна быть подготовлена для каждого теста.
+Для этой цели Codeception предоставляет модуль `Db`. Он загрузит дамп базы данных после каждого пройденного теста. Чтобы заставить repopulation работать, создайте sql дамп Вашей базы и поместите в папку __/tests/data__. Установите соединение с базой и укажите путь к дампу в глобальном конфиге Codeception-а.
+
 
 ````yaml
-# in codeception.yml:
+# В codeception.yml:
 modules:
     config:
         Db:
@@ -312,16 +311,16 @@ modules:
             dump: tests/_data/dump.sql
 ````
 
-### Debugging
+### Отладка
+Модуль PhpBrowser-а module может выводить ценные данные в процессе работы. Просто выполните тесты с опцией  `--debug` чтобы увидеть дополнительный вывод. При каждом провале, скриншот последней отображенной страницы будет сохранен в папке
+__tests/log__. PHPBrowser сохранит html код, и Selenium сохранит скриншот страницы.
+Когда [WebDebug](http://codeception.com/docs/modules/WebDebug) приаттачен, Вы сможете использовать его методы, чтобы сохранить скриншот текущего окна в любое время : ).
 
-The PhpBrowser module can output valuable information while running. Just execute tests with the `--debug` option to see additional output. On each fail, the snapshot of the last shown page will be stored in the __tests/log__ directory. PHPBrowser will store html code, and Selenium will save the screenshot of a page.
-When [WebDebug](http://codeception.com/docs/modules/WebDebug) is attached you can use it's methods to save screenshot of current window in any time.
+### Пользовательские Методы
 
-### Custom Methods
-
-In case you need to implement custom assertions or action you can extend a [Helper](http://codeception.com/docs/03-Modules#helpers) class.
-To perform operations on current browser state you should access [Mink Session](http://mink.behat.org/#control-the-browser-session) object.
-Here is the way you can do this:
+Если Вам нужно внедрить написанные Вами ассерты или методы, Вы можете расширить класс [Helper](http://codeception.com/docs/03-Modules#helpers).
+Для выполнения операций в текущем состоянии браузера, Вам следует обратиться к объекту [Mink Session](http://mink.behat.org/#control-the-browser-session).
+Вот, как Вы сможете это сделать:
 
 ``` php
 <?php
@@ -337,12 +336,13 @@ class WebHelper extends \Codeception\Module {
 ?>
 ```
 
-We [connected a module](http://codeception.com/docs/03-ModulesAndHelpers#Connecting-Modules), then we retrieved content from Mink session class.
-You should definitely learn Mink to dig deeper.
-And in the end we performed assertion on current content.
+Мы [подключили модуль](http://codeception.com/docs/03-ModulesAndHelpers#Connecting-Modules), затем мы вернули контент из класса [Mink session].
+Чтобы заглянуть глубже, Вам определенно следует изучить Mink : ).
+И, наконец, мы выполнили ассерт над текущим контентом(В данном случае, мы проверили, является ли размер полученного контента больше, чем $size = 3000. Мы выдвинули утверждение, что он не должен, по сути, больше, чем нам нужно : ) ). 
 
-## Conclusion
+## Заключение
 
-Writing acceptance tests with Codeception and PhpBrowser is a good start. You can easily test your Joomla, Drupal, Wordpress sites, as well as those made with frameworks. Writing acceptance tests is like describing a tester's actions in PHP. They are quite readable and very easy to write. Don't forget to repopulate the database on each test run.
+Написание приемочных тестов с помощью Codeception и PhpBrowser - хорошее начало. Вы с легкостью можете проверить Ваши сайты на Joomla, Drupal, Wordpress также, как и созданные надругих фреймворках. Написание приемочных тестов - это всё равно, что описывать действия тестера в PHP. Они достаточно хорошо читабельны и очень просты в написании. Writing acceptance tests is like describing a tester's actions in PHP. They are quite readable and very easy to write. Не забывайте repopulate базу данных при каждом запуске теста!
 
 Трудились и переводили ребята из [amyLabs](http://amylabs.ru/)
+Дополнил перевод Рымаров Владислав
