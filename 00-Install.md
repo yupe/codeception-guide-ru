@@ -2,7 +2,7 @@
 
 **Phar**
 
-Убедись, что у Вас уже установлен >PHP 5.3 и mod_curl включен.
+Убедись, что у Вас уже установлен PHP >=5.3 и mod_curl включен.
 
 Скачайте phar-архив Codeception с http://codeception.com
 
